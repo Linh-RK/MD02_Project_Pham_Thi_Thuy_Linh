@@ -23,6 +23,7 @@ public class Data {
 
     public static List<Category> categoryList = new ArrayList<>();
     public static List<Product> productList = new ArrayList<>();
+    public static List<Product> wishList = new ArrayList<>();
     public static List<User> userList = new ArrayList<>();
     public static List<Cart> cartList = new ArrayList<>();
     public static List<Order> orderList = new ArrayList<>();

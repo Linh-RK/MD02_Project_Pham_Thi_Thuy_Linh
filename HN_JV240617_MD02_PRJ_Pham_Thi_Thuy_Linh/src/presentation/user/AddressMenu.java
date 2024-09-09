@@ -4,6 +4,8 @@ import business.service.AddressService;
 
 import java.util.Scanner;
 
+import static business.Data.currentUser;
+
 public class AddressMenu {
     public static void addressMenu(Scanner sc) {
         boolean flag = true;
@@ -21,19 +23,19 @@ public class AddressMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    AddressService.searchAddressById(sc);
+                    AddressService.searchAddressById(sc,currentUser);
                     break;
                 }
                 case "2":{
-                    AddressService.showAllAddress();
+                    AddressService.showAllAddress(currentUser);
                     break;
                 }
                 case "3":{
-                    AddressService.deleteAddressById(sc);
+                    AddressService.deleteAddressById(sc,currentUser);
                     break;
                 }
                 case "4":{
-                    AddressService.addNewAddress(sc);
+                    AddressService.addNewAddress(sc,currentUser);
                     break;
                 }
                 case "5":{

@@ -28,7 +28,10 @@ public class CategoryService {
         if(categoryList.isEmpty()){
             System.err.println("Category list is empty");
         }else{
+            System.out.println("------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-15s | %-10s | %-50s |\n","ID","Category","Status","Description");
             categoryList.forEach(Category::displayCategory);
+            System.out.println("------------------------------------------------------------------------------");
         }
     }
     public  static void updateCategory(Scanner sc) {

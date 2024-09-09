@@ -143,7 +143,7 @@ public class Order {
 
     private Address inputAddress(Scanner sc) {
         System.out.println("Address List:");
-        showAllAddress();
+        showAllAddress(currentUser);
         System.out.println((currentUser.getUserAddressList().size()+1)+ ". Add new address");
         do {
             int addressId = inputNum(sc);

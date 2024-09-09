@@ -34,11 +34,11 @@ public class AdminMenu {
                     break;
                 }
                 case "3":{
-                    userManagement(sc);
+                    orderManagement(sc);
                     break;
                 }
                 case "4":{
-                    orderManagement(sc);
+                    userManagement(sc);
                     break;
                 }
                 case "5":{

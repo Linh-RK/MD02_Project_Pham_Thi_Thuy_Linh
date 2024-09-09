@@ -1,9 +1,14 @@
 package presentation.user;
 
+import business.service.WishListService;
+
 import java.util.Scanner;
+
+import static business.Data.currentUser;
 
 public class WishListMenu {
     public static void wishListMenu(Scanner sc) {
+        boolean flag = true;
         do {
             System.out.println("--------------------------------WISHLIST MENU---------------------------------");
             System.out.println("|                                                                            |");
@@ -17,19 +22,19 @@ public class WishListMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-
+                    WishListService.showAll(sc,currentUser);
                     break;
                 }
                 case "2":{
-
+                    WishListService.addNewProductIWishList(sc,currentUser);
                     break;
                 }
                 case "3":{
-
+                    WishListService.deleteProductInWisList(sc,currentUser);
                     break;
                 }
                 case "4":{
-
+                    flag = false;
                     break;
                 }
                 default:{
@@ -37,6 +42,6 @@ public class WishListMenu {
                     break;
                 }
             }
-        }while (true);
+        }while (flag);
     }
 }

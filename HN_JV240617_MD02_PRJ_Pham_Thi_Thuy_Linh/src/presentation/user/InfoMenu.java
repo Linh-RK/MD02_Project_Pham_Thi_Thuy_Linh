@@ -4,7 +4,9 @@ import business.service.UserService;
 
 import java.util.Scanner;
 
+import static business.Data.currentUser;
 import static business.Data.user;
+import static business.entity.User.displayDetails;
 import static presentation.user.AddressMenu.addressMenu;
 
 public class InfoMenu {
@@ -24,7 +26,7 @@ public class InfoMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    user.toString();
+                    displayDetails(currentUser);
                     break;
                 }
                 case "2":{
@@ -32,7 +34,7 @@ public class InfoMenu {
                     break;
                 }
                 case "3":{
-                    user.updatePassword(sc);
+                    currentUser.updatePassword(sc);
                     break;
                 }
                 case "4":{
@@ -43,7 +45,7 @@ public class InfoMenu {
                     break;
                 }
             }
-        }while (true);
+        }while (flag);
     }
 
     private static void menuEditInfo(Scanner sc) {
@@ -52,8 +54,9 @@ public class InfoMenu {
                 System.out.println("-------------------------------EDIT INFO MENU---------------------------------");
                 System.out.println("|                                                                            |");
                 System.out.println("|        1. Cập nhật địa chỉ                                                 |");
-                System.out.println("|        2. Thay đổi mật khẩu                                                |");
-                System.out.println("|        3. Quay lại                                                         |");
+                System.out.println("|        2. Thay đổi các thông tin khác                                      |");
+                System.out.println("|        3. Thay đổi mật khẩu                                                |");
+                System.out.println("|        4. Quay lại                                                         |");
                 System.out.println("|                                                                            |");
                 System.out.println("------------------------------------------------------------------------------");
                 System.out.println("Please enter your choice");
@@ -64,10 +67,14 @@ public class InfoMenu {
                         break;
                     }
                     case "2":{
-                        user.updatePassword(sc);
+                        currentUser.updateUserInfo(sc);
                         break;
                     }
                     case "3":{
+                        currentUser.updatePassword(sc);
+                        break;
+                    }
+                    case "4":{
                         flag=false;
                         break;
                     }

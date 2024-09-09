@@ -3,6 +3,7 @@ package business.entity;
 import business.ultil.enumList.Role;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -16,21 +17,20 @@ public class User {
     private String userName;                //3
     private String userEmail;               //4
     private String userFullName;            //5
-    private boolean userStatus;             //6
+    private boolean userStatus =true;             //6
     private String userPassword;            //7
     private String userPhoneNumber;         //8
-    private List<Address> userAddressList;      //9
+    private List<Address> userAddressList=new ArrayList<>();      //9
     private LocalDate userCreatedDate;      //10
     private LocalDate userUpdatedDate;      //11
-    private List<Order> historyOrder;             //12
-    private List<Cart> cartList;            //13
+    private List<Cart> cartList= new ArrayList<>();            //13
+    private List<Product> wishList= new ArrayList<>();            //13
 
     public User() {
     }
 
-    public User(Role role, int userId, String userName, String userEmail, String userFullName,
-                boolean userStatus, String userPassword, String userPhoneNumber, List<Address> userAddressList,
-                LocalDate userCreatedDate) {
+    public User(Role role, int userId, String userName, String userEmail, String userFullName, boolean userStatus,
+                String userPassword, String userPhoneNumber, LocalDate userCreatedDate, LocalDate userUpdatedDate) {
         this.role = role;
         this.userId = userId;
         this.userName = userName;
@@ -39,8 +39,8 @@ public class User {
         this.userStatus = userStatus;
         this.userPassword = userPassword;
         this.userPhoneNumber = userPhoneNumber;
-        this.userAddressList = userAddressList;
         this.userCreatedDate = userCreatedDate;
+        this.userUpdatedDate = userUpdatedDate;
     }
 
 
@@ -84,7 +84,7 @@ public class User {
         this.userFullName = userFullName;
     }
 
-    public boolean isUserStatus() {
+    public boolean getUserStatus() {
         return userStatus;
     }
 
@@ -137,7 +137,7 @@ public class User {
     }
 
     public void setHistoryOrder(List<Order> historyOrder) {
-        this.historyOrder = historyOrder;
+        return;
     }
 
     public List<Cart> getCartList() {
@@ -146,6 +146,18 @@ public class User {
 
     public void setCartList(List<Cart> cartList) {
         this.cartList = cartList;
+    }
+
+    public boolean isUserStatus() {
+        return userStatus;
+    }
+
+    public List<Product> getWishList() {
+        return wishList;
+    }
+
+    public void setWishList(List<Product> wishList) {
+        this.wishList = wishList;
     }
 
     public void signIn(Scanner sc) {
@@ -160,8 +172,8 @@ public class User {
 //        this.userAddress = inputUserAddress(sc);
         this.userCreatedDate = currentDate();
 //        this.userUpdatedDate = inputUserUpdatedDate(sc);
-        this.historyOrder = null;
-        this.cartList = null;
+//        this.historyOrder = null;
+//        this.cartList = null;
     }
 //    public void login(Scanner sc) {
 //        this.userEmail = inputUserEmail(sc);
@@ -253,22 +265,44 @@ public class User {
         }while(true);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +"\n"+
-                "role=" + role +"\n"+
-                ", userId=" + userId +"\n"+
-                ", userName='" + userName + '\'' +"\n"+
-                ", userEmail='" + userEmail + '\'' +"\n"+
-                ", userFullName='" + userFullName + '\'' +"\n"+
-                ", userStatus=" + userStatus +"\n"+
-                ", userPassword='" + userPassword + '\'' +"\n"+
-                ", userPhoneNumber='" + userPhoneNumber + '\'' +"\n"+
-                ", userAddressList=" + userAddressList +"\n"+
-                ", userCreatedDate=" + userCreatedDate +"\n"+
-                ", userUpdatedDate=" + userUpdatedDate +"\n"+
-                ", historyOrder=" + historyOrder +"\n"+
-                ", cartList=" + cartList +"\n"+
-                '}';
+
+    public static void displayDetails(User user) {
+        System.out.println("ID: " + user.getUserId());
+        System.out.println("Name: " + user.getUserName());
+        System.out.println("Email: " + user.getUserEmail());
+        System.out.println("FullName: " + user.getUserFullName());
+        System.out.println("Status: " + user.getUserStatus());
+        System.out.println("Password: " + user.getUserPassword());
+        System.out.println("PhoneNumber: " + user.getUserPhoneNumber());
+        System.out.println("CreatedDate: " + user.getUserCreatedDate());
+        System.out.println("UpdatedDate: " + user.getUserUpdatedDate());
+        if(user.getUserAddressList()==null || user.getUserAddressList().isEmpty()){
+            System.out.println("Address list is empty");
+        }else{
+        System.out.println("AddressList: ");
+        user.getUserAddressList().forEach(Address::displayAddress);
+        }
+
+        if(user.getHistoryOrder().isEmpty()||user.getHistoryOrder()==null){
+            System.out.println("History order is empty");
+        }else{
+            System.out.println("historyOrder: ");
+            user.getHistoryOrder().forEach(Order::displayOrder);
+        }
+
+        if(user.getCartList()==null||user.getCartList().isEmpty()){
+            System.out.println("Cart is empty");
+        }else{
+            System.out.println("cartList: ");
+            user.getCartList().forEach(Cart::displayCart);
+        }
+
+    }
+    public  void displayUser() {
+        System.out.println("--------------------------------------------------------------");
+        System.out.printf("| %-5d | %-20s | %-20s | %-10s | %-20s | %-20s |\n",this.userId,this.userName,this.userEmail,this.userStatus?"Active":"Block",this.userPhoneNumber,this.userCreatedDate);
+    }
+    public static void switchUserStatus(Scanner sc, User user){
+        user.setUserStatus(!user.getUserStatus());
     }
 }

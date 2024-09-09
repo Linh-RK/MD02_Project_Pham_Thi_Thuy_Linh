@@ -12,19 +12,19 @@ import static business.ultil.enumList.Common.inputNum;
 import static java.util.stream.Collectors.toList;
 
 public class CartService {
-public static void showAllCart() {
-   if(currentUser.getCartList().isEmpty()) {
+public static void showAllCart(User user) {
+   if(user.getCartList()==null||user.getCartList().isEmpty()) {
       System.err.println("Cart is empty");
    }else{
 
-      System.out.println("----------------------------------------------------------");
-      System.out.printf("| %20s | %-15s | %-15s |", "Product", "Price", "Total");
-      System.out.println("----------------------------------------------------------");
-      currentUser.getCartList().forEach(Cart::displayCart);
+      System.out.println("--------------------------------------------------------------------------------------");
+      System.out.printf("| %15s | %20s | %5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
+      user.getCartList().forEach(Cart::displayCart);
+      System.out.println("--------------------------------------------------------------------------------------");
    }
 
 }
-public static void addToCart(Scanner sc) {
+public static void addToCart(Scanner sc,User user) {
    Cart cartNew = new Cart();
    showAllProduct();
    System.out.println("Enter product ID you want to add to cart: ");
@@ -48,7 +48,7 @@ public static void addToCart(Scanner sc) {
 //                     update lai userList
 //                     index of currentUser in userList
                      userList.set(currentIndex,currentUser);
-                     showAllCart();
+                     showAllCart(user);
                      return;
                   }else{
 //                     Product not exist in cart
@@ -59,14 +59,14 @@ public static void addToCart(Scanner sc) {
                      cartNew.getProductInCart().setProductStock(productAdd.getProductStock() - quantity);
                   }
                   System.out.println("Added product to the cart");
-                  showAllCart();
+                  showAllCart(currentUser);
                   return;
                }
             }while(true);
          }
    }while(true);
 }
-public static void changeQtyProductInCart(Scanner sc) {
+public static void changeQtyProductInCart(Scanner sc, User user) {
    System.out.println("Enter product ID you want to edit: ");
       int productID = inputNum(sc);
       if(currentUser.getCartList().stream().noneMatch(c->c.getProductInCart().getProductId()==productID)){
@@ -86,20 +86,20 @@ public static void changeQtyProductInCart(Scanner sc) {
          System.out.println("New cart:");
          productOldCart.setQty(quantity);
          System.out.println("Edited successfully");
-         showAllCart();
+         showAllCart(currentUser);
 
          return;
       }
 }
-public static void deleteProductInCart(Scanner sc) {
-   showAllCart();
+public static void deleteProductInCart(Scanner sc,User user) {
+   showAllCart(currentUser);
    System.out.println("Enter product ID you want to delete: ");
          int productID = inputNum(sc);
-         if(currentUser.getCartList().stream().noneMatch(c->c.getProductInCart().getProductId()==productID)) {
+         if(user.getCartList().stream().noneMatch(c->c.getProductInCart().getProductId()==productID)) {
             System.err.println("Product does not exist in cart");
             return;
          }else{
-            Cart productOldCart = currentUser.getCartList().stream().filter(c->c.getProductInCart().getProductId()==productID).toList().getFirst();
+            Cart productOldCart = user.getCartList().stream().filter(c->c.getProductInCart().getProductId()==productID).toList().getFirst();
             Product productOld = productOldCart.getProductInCart();
 //              Update Cart
             currentUser.getCartList().remove(productOldCart);
@@ -107,22 +107,22 @@ public static void deleteProductInCart(Scanner sc) {
             productOld.setProductStock(productOld.getProductStock() + productOldCart.getQty());
 
             System.out.println("Delete successfully");
-            showAllCart();
+            showAllCart(currentUser);
             return;
          }
 }
-public static void clearCart(Scanner sc) {
-   if(cartList.isEmpty()) {
+public static void clearCart(Scanner sc,User user) {
+   if(user.getCartList().isEmpty()) {
       System.err.println("Cart is empty");
    }else{
       Product productBeforeClear ;
-      for(Cart cart: cartList) {
+      for(Cart cart: currentUser.getCartList()) {
          int index = productList.indexOf(cart.getProductInCart());
          productBeforeClear =productList.get(index);
          productList.get(index).setProductStock(productBeforeClear.getProductStock()+ cart.getQty());
       }
       userList.stream().filter(e->e.getUserId()== currentUser.getUserId()).findFirst().get().getCartList().clear();
-      showAllCart();
+      showAllCart(currentUser);
    }
 }
 }

@@ -1,6 +1,7 @@
 package presentation;
 
 import business.entity.Category;
+import business.entity.Order;
 import business.entity.Product;
 import business.entity.User;
 import business.service.ProductService;
@@ -41,16 +42,18 @@ public class Main_Menu {
         productList.add(product5);
         productList.add(product6);
 
-        User admin = new User(Role.ADMIN, 1,"user1","admin@gmail.com","Nguyen Van Admin",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
-        User user2 = new User(Role.USER, 2,"user2","user1@gmail.com","Nguyen Van 1",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
-        User user3 = new User(Role.USER, 3,"user3","user2@gmail.com","Nguyen Van 2",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
-        User user4 = new User(Role.USER, 4,"user4","user3@gmail.com","Nguyen Van 3",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
-        User user5 = new User(Role.USER, 5,"user5","user4@gmail.com","Nguyen Van 4",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1));
+
+        User admin = new User(Role.ADMIN, 1, "user1", "admin@gmail.com", "Nguyen Van Admin", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1));
+        User user2 = new User(Role.USER, 2,"user2","user2@gmail.com","Nguyen Van 1",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
+        User user3 = new User(Role.USER, 3,"user3","user3@gmail.com","Nguyen Van 2",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
+        User user4 = new User(Role.USER, 4,"user4","user4@gmail.com","Nguyen Van 3",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1) );
+        User user5 = new User(Role.USER, 5,"user5","user5@gmail.com","Nguyen Van 4",true,"123abc","0987654321",null,LocalDate.of(2023, 5, 1));
         userList.add(admin);
         userList.add(user2);
         userList.add(user3);
         userList.add(user4);
         userList.add(user5);
+
 
         Scanner sc = new Scanner(System.in);
         do {
@@ -87,6 +90,7 @@ public class Main_Menu {
                     break;
                 }
                 default:{
+                    System.out.println("Please enter a choice form 1 -> 5");
                     break;
                 }
             }

@@ -2,8 +2,7 @@ package business.entity;
 
 import java.util.Scanner;
 
-import static business.Data.productList;
-import static business.Data.productService;
+import static business.Data.*;
 import static business.ultil.enumList.Common.inputNum;
 
 public class Cart {
@@ -62,8 +61,8 @@ public class Cart {
     }
 
     public void displayCart(){
-        System.out.println("----------------------------------------------------------");
-        System.out.printf("| %20s | %-15f | %-15f |", productInCart.getProductName(), productInCart.getProductPrice(), productInCart.getProductPrice()*qty);
+        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.printf("| %-15d | %-20s | %-5d | %-15f | %-15f |\n",productInCart.getProductId(), productInCart.getProductName(), cart.getQty(), productInCart.getProductPrice(), productInCart.getProductPrice()*qty);
 
     }
 }

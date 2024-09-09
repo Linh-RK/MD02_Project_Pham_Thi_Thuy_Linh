@@ -136,7 +136,7 @@ public class ProductManagement {
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
-            productList.stream().sorted(Comparator.comparing( Product::getProductName)).forEach(Product::display);
+            productList.stream().sorted(Comparator.comparing( Product::getProductName)).toList().reversed().forEach(Product::display);
         }
     }
 }
