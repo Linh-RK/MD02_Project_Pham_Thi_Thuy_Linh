@@ -17,7 +17,7 @@ public class InfoMenu {
             System.out.println("----------------------------------INFO MENU-----------------------------------");
             System.out.println("|                                                                            |");
             System.out.println("|        1. Hiển thị thông tin                                               |");
-            System.out.println("|        2. Cập nhật thông tin                                               |");
+            System.out.println("|        2. Quản lý thông tin                                                |");
             System.out.println("|        3. Thay đổi mật khẩu                                                |");
             System.out.println("|        4. Quay lại                                                         |");
             System.out.println("|                                                                            |");
@@ -53,7 +53,7 @@ public class InfoMenu {
             do {
                 System.out.println("-------------------------------EDIT INFO MENU---------------------------------");
                 System.out.println("|                                                                            |");
-                System.out.println("|        1. Cập nhật địa chỉ                                                 |");
+                System.out.println("|        1. Quản lý địa chỉ                                                  |");
                 System.out.println("|        2. Thay đổi các thông tin khác                                      |");
                 System.out.println("|        3. Thay đổi mật khẩu                                                |");
                 System.out.println("|        4. Quay lại                                                         |");

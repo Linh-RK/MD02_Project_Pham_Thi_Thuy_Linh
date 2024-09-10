@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import static business.Data.currentUser;
 import static business.Data.order;
+import static business.service.OrderService.addOrderCheckOut;
 
 public class CartMenu {
     public static void cartMenu(Scanner sc) {
@@ -47,7 +48,7 @@ public class CartMenu {
                     break;
                 }
                 case "6":{
-                    order.inputOrder(sc);
+                    addOrderCheckOut(sc);
                     break;
                 }
                 case "7":{

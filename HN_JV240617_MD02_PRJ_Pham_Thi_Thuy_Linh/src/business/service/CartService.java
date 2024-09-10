@@ -9,76 +9,68 @@ import java.util.Scanner;
 import static business.Data.*;
 import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.inputNum;
-import static java.util.stream.Collectors.toList;
 
 public class CartService {
 public static void showAllCart(User user) {
    if(user.getCartList()==null||user.getCartList().isEmpty()) {
       System.err.println("Cart is empty");
    }else{
-
-      System.out.println("--------------------------------------------------------------------------------------");
-      System.out.printf("| %-15s | %-20s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
+      System.out.println("------------------------------------------------------------------");
+      System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n","ID", "Product", "Qty", "Price", "Total");
       user.getCartList().forEach(Cart::displayCart);
-      System.out.println("--------------------------------------------------------------------------------------");
+      System.out.println("------------------------------------------------------------------");
    }
 
 }
 public static void addToCart(Scanner sc,User user) {
    Cart cartNew = new Cart();
-   int quantity ;
    int productID;
    showAllProduct();
    System.out.println("Enter product ID you want to add to cart: ");
-
    do {
        productID = inputNum(sc);
       int finalProductID = productID;
       if(productList.stream().noneMatch(p->p.getProductId()== finalProductID)) {
             System.err.println("Product ID does not match");
-         }else {
+      }else {
+//         ton tai id nhap vao
          int finalProductID1 = productID;
          Product productAdd = productList.stream().filter(p->p.getProductId()== finalProductID1).toList().getFirst();
-            System.out.println("Enter quantity of product you want to add to cart: ");
-
-            do {
-               quantity = inputNum(sc);
-               System.out.println(quantity);
-               if(quantity > productAdd.getProductStock()) {
-                  System.err.println("SORRY ! we don't have enough product in stock to add to cart");
-               }else {
-                  int finalProductID2 = productID;
-                  if(currentUser.getCartList().stream().anyMatch(p->p.getProductInCart().getProductId()== finalProductID2)){
-                     int finalProductID3 = productID;
-                     Cart cartOld = currentUser.getCartList().stream().filter(p->p.getProductInCart().getProductId()== finalProductID3).findFirst().get();
-                     cartOld.setQty(cartOld.getQty() + quantity);
-                     userList.set(currentIndex,currentUser);
-
-                  }else{
-                     cartNew.setProductInCart(productAdd);
-                     cartNew.setQty(quantity);
-                     cartNew.getProductInCart().setProductStock(productAdd.getProductStock() - quantity);
-//                     System.out.println(cartNew.getQty());
-                     currentUser.getCartList().add(cartNew);
-                     currentUser.setCartList(currentUser.getCartList());
-                     userList.set(currentIndex,currentUser);
-
-//                     int finalProductID4 = productID;
-//                     System.out.println("Product stock");
-//                     System.out.println(userList.get(currentIndex).getCartList().stream().filter(e->e.getProductInCart().getProductId()== finalProductID4).findFirst().get().getProductInCart().getProductStock());
-//                     System.out.println("Cart qty");
-//                     System.out.println(userList.get(currentIndex).getCartList().stream().filter(e->e.getProductInCart().getProductId()== finalProductID4).findFirst().get().getQty());
-
-                  }
-                  currentUser=userList.get(currentIndex);
-                  System.out.println("Added product to the cart");
-                  showAllCart(currentUser);
-                  return;
-               }
-            }while(true);
+//         if product want to add to cart not in cart
+         int quantity;
+         if(currentUser.getCartList().stream().noneMatch(e->e.getProductInCart().getProductId()==finalProductID1)){
+             quantity= inputQty(sc,0,productAdd.getProductStock());
+            cartNew.setProductInCart(productAdd);
+            cartNew.setQty(quantity);
+            currentUser.getCartList().add(cartNew);
+         }else{
+//            if product want to add to cart already exist in cart
+            Cart cartUpdate = currentUser.getCartList().stream().filter(e->e.getProductInCart().getProductId()==finalProductID1).toList().getFirst();
+            quantity= inputQty(sc,cartUpdate.getQty(), productAdd.getProductStock());
+            cartUpdate.setQty(cartUpdate.getQty()+quantity);
          }
+         currentUser.setCartList(currentUser.getCartList());
+         userList.set(currentIndex,currentUser);
+         currentUser=userList.get(currentIndex);
+         System.out.println("Added product to the cart");
+         showAllCart(currentUser);
+         return;
+      }
    }while(true);
 }
+
+   private static int inputQty(Scanner sc, int i, int productStock) {
+      System.out.println("Enter product Qty: ");
+   do {
+      int addQty = inputNum(sc);
+      if(addQty + i> productStock){
+         System.err.println("SORRY! We don't have enough product stock");
+      }else{
+         return addQty;
+      }
+   }while(true);
+   }
+
 public static void changeQtyProductInCart(Scanner sc, User user) {
    System.out.println("Enter product ID you want to edit: ");
       int productID = inputNum(sc);
@@ -89,17 +81,13 @@ public static void changeQtyProductInCart(Scanner sc, User user) {
          Product productOld = productOldCart.getProductInCart();
 //              Display
          System.out.println("Product you want to edit: ");
-         System.out.println("--------------------------------------------------------------------------------------");
-         System.out.printf("| %-15s | %-20s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
+         System.out.println("------------------------------------------------------------------");
+         System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n","ID", "Product", "Qty", "Price", "Total");
          productOldCart.displayCart();
-         System.out.println("--------------------------------------------------------------------------------------");
-
+         System.out.println("------------------------------------------------------------------");
          System.out.println("Enter new quantity of product you want to edit: ");
          int quantity = inputNum(sc);
 
-//              Update Product List
-         productOld.setProductStock(productOld.getProductStock() + productOldCart.getQty() - quantity);
-//              Update Cart
          System.out.println("New cart:");
          productOldCart.setQty(quantity);
          System.out.println("Edited successfully");
@@ -121,7 +109,7 @@ public static void deleteProductInCart(Scanner sc,User user) {
 //              Update Cart
             currentUser.getCartList().remove(productOldCart);
 //              Update Product List
-            productOld.setProductStock(productOld.getProductStock() + productOldCart.getQty());
+//            productOld.setProductStock(productOld.getProductStock() + productOldCart.getQty());
 
             System.out.println("Delete successfully");
             showAllCart(currentUser);
@@ -132,12 +120,6 @@ public static void clearCart(Scanner sc,User user) {
    if(user.getCartList().isEmpty()) {
       System.err.println("Cart is empty");
    }else{
-      Product productBeforeClear ;
-      for(Cart cart: currentUser.getCartList()) {
-         int index = productList.indexOf(cart.getProductInCart());
-         productBeforeClear =productList.get(index);
-         productList.get(index).setProductStock(productBeforeClear.getProductStock()+ cart.getQty());
-      }
       userList.stream().filter(e->e.getUserId()== currentUser.getUserId()).findFirst().get().getCartList().clear();
       showAllCart(currentUser);
    }

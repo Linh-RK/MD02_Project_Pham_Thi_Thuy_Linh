@@ -1,8 +1,6 @@
 package business.service;
 
-import business.entity.Cart;
-import business.entity.Order;
-import business.entity.Product;
+import business.entity.*;
 import business.ultil.enumList.OrderStatus;
 import business.ultil.enumList.Role;
 
@@ -15,19 +13,47 @@ import static business.Data.*;
 import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 import static presentation.admin.OrderManagement.orderManagement;
+import static presentation.user.CartMenu.cartMenu;
 
 public class OrderService {
+    public static void addOrderCheckOut(Scanner sc) {
+        System.out.println("Check out:");
+        Order orderCheckOut = new Order();
+        orderCheckOut.inputOrder(sc);
+        System.err.println("Please confirm your order:");
+        orderCheckOut.displayOrderDetails();
+        System.err.println("Enter your choice (Y/N):");
+        String answer = inputAnswer(sc);
+        if (answer.equalsIgnoreCase("Y")) {
+//            subtract qty from stock
+//            orderCheckOut.getOrderCartList().forEach()
+            Product p;
+           for(Cart cart : orderCheckOut.getOrderCartList()){
+               p =cart.getProductInCart();
+               p.setProductStock(p.getProductStock() - cart.getQty());
+           }
+//           khong biet da cap nhat len tren userList chua
+            orderList.add(orderCheckOut);
+            currentUser.getCartList().clear();
+            userList.set(currentIndex, currentUser);
+            System.out.println("Order successfully, thank you");
+        }else{
+            System.out.println("Canceled order");
+            cartMenu(sc);
+        }
 
+//        showAllCategory();
+    }
     public static void showAllOrder(List<Order> orderList){
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
-        System.out.println("------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------");
         System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
         orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).forEach(Order::displayOrder);
-        System.out.println("------------------------------------------------------------------------");
-}
-    };
+        System.out.println("--------------------------------------------------------------------------");
+        }
+    }
     public static void findOrderById(Scanner sc,List<Order> orderList){
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
@@ -40,7 +66,7 @@ public class OrderService {
                 orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrder);
             }
         }
-    };
+    }
     public static void findByOrderStatus(Scanner sc,List<Order> orderList){
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
@@ -54,7 +80,7 @@ public class OrderService {
                 System.err.println("Order status not found");
             } else {
                 System.out.println("Result");
-                orderList.stream().filter(e -> e.getOrderStatus().equals(status.toUpperCase())).forEach(Order::displayOrder);
+                orderList.stream().filter(e -> e.getOrderStatus().name().equalsIgnoreCase(status)).forEach(Order::displayOrder);
             }
         }
     }
@@ -68,7 +94,6 @@ public class OrderService {
         return false;
     }
 
-    ;
     public static void orderDetailById(Scanner sc, List<Order> orderList){
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
@@ -215,16 +240,23 @@ public class OrderService {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
-            System.out.println("Enter the start date you want to search");
+            System.out.println("Enter the start date you want to search (yyyy-mm-dd)");
             LocalDate startDate = inputDate(sc);
-            System.out.println("Enter the end date you want to search");
+            System.out.println("Enter the end date you want to search (yyyy-mm-dd)");
             LocalDate endDate = inputDate(sc);
 
             List<Order> resultOrder = orderList.stream().filter(e -> {
                 return e.getOrderCreateDate().isAfter(startDate) && e.getOrderCreateDate().isBefore(endDate);
             }).toList();
-            System.out.println("Result");
-            resultOrder.forEach(Order::displayOrder);
+            if(resultOrder.isEmpty()){
+                System.err.println("None order found");
+            }else {
+                System.out.println("Result");
+                System.out.println("----------------------------------------------------------------");
+                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n", "ID", "Serial", "User ID", "Total", "Status", "Created Date");
+                resultOrder.forEach(Order::displayOrder);
+                System.out.println("----------------------------------------------------------------");
+            }
         }
     }
 
@@ -235,7 +267,11 @@ public class OrderService {
             showAllOrder(orderList);
             System.out.println("Enter the ID order you want to show detail");
             int id = inputNum(sc);
-            orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::toString);
+            if (orderList.stream().noneMatch(e -> e.getOrderId() == id)) {
+                System.err.println("Order ID not found");
+            }else {
+                orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrderDetails);
+            }
         }
     }
 

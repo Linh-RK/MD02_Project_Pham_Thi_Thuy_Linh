@@ -29,6 +29,7 @@ public class UserService {
             }else{
                 User.switchUserStatus(sc,userList.stream().filter(e->e.getUserId()==id).findFirst().get());
             }
+          showAllUserInfo(userList);
     }
 
     public static void deleteUser(Scanner sc){
@@ -40,6 +41,7 @@ public class UserService {
                 userList.remove(userList.stream().filter(e->e.getUserId()==id).findFirst().get());
                 System.out.println("User successfully deleted");
             }
+            showAllUserInfo(userList);
     }
     public static void searchUser(Scanner sc){
         System.out.println("Please enter ID user you want to search:");
@@ -55,14 +57,20 @@ public class UserService {
             }
     }
     public static void sortUserByNameIncrease(){
-
-       List<User> resultList= userList.stream().sorted(Comparator.comparing(User::getUserName)).toList();
-       showAllUserInfo(resultList);
-    }
-    public static void sortUserByNameDecrease(){
-        List<User> resultList= userList.stream().sorted(Comparator.comparing(User::getUserName)).toList().reversed();
+    if(userList.isEmpty()){
+        System.err.println("User list is empty");
+    }else {
+        List<User> resultList = userList.stream().sorted(Comparator.comparing(User::getUserName)).toList();
         showAllUserInfo(resultList);
     }
-//    public static void addAdress(){}
+    }
+    public static void sortUserByNameDecrease(){
+        if(userList.isEmpty()){
+            System.err.println("User list is empty");
+        }else {
+            List<User> resultList = userList.stream().sorted(Comparator.comparing(User::getUserName)).toList().reversed();
+            showAllUserInfo(resultList);
+        }
+    }
 
 }

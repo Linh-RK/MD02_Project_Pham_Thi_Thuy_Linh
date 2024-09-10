@@ -55,7 +55,7 @@ public class Common {
             if(phoneNumber.isBlank()){
                 System.err.println("Data can't be blank. Please try again.");
             }else {
-                if(!phoneNumber.matches("/((09|03|07|08|05)+([0-9]{8})\\b)/g")){
+                if(!phoneNumber.matches("[0-9]{10,11}")){
                     System.err.println("Phone number is incorrect format. Please try again.");
                 } else {
                     return phoneNumber;

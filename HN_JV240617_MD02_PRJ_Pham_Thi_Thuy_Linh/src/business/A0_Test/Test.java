@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        int n = inputNum(sc);
-//        System.out.println(n);
+        Scanner sc = new Scanner(System.in);
+        String n = inputPhoneNumber(sc);
+        System.out.println(n);
 //        System.out.println(currentDate());
     }
     public static int inputNum(Scanner sc){
@@ -35,5 +35,20 @@ public class Test {
         LocalDate today = LocalDate.now( );
         System.out.println(today);
         return today;
+    }
+    public static String inputPhoneNumber(Scanner sc) {
+        System.out.println("Enter Phone Number: ");
+        do{
+            String phoneNumber = sc.nextLine();
+            if(phoneNumber.isBlank()){
+                System.err.println("Data can't be blank. Please try again.");
+            }else {
+                if(!phoneNumber.matches("[0-9]{10,11}")){
+                    System.err.println("Phone number is incorrect format. Please try again.");
+                } else {
+                    return phoneNumber;
+                }
+            }
+        }while(true);
     }
 }

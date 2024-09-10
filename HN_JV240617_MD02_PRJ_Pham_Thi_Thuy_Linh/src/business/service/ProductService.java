@@ -6,15 +6,16 @@ import java.util.Scanner;
 
 import static business.Data.productList;
 import static business.ultil.enumList.Common.inputNum;
+import static business.ultil.enumList.Common.inputString;
 
 public class ProductService {
     public static void showAllProduct() {
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
-            System.out.println(" ----------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
             productList.forEach(Product::display);
         }
     }
@@ -60,16 +61,16 @@ public class ProductService {
     public static void searchProduct(Scanner sc) {
 //        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
         System.out.println("Enter the keyword you want to search:");
-            String keyword = sc.nextLine();
-            if(keyword.isBlank()){
-                System.err.println("Keyword is empty. Please try again");
-            }else {
-                if(productList.stream().noneMatch(e->e.getProductId()==Integer.parseInt(keyword))){
-                    System.err.println("No result matching keyword " + keyword);
-                }else{
-                    System.out.println("Result:");
-                    productList.stream().filter(e->e.getProductName().contains(keyword)).forEach(Product::display);
-                }
-            }
+        String keyword = inputString(sc);
+        if(productList.stream().noneMatch(e->e.getProductName().contains(keyword))){
+            System.err.println("No result matching keyword " + keyword);
+        }else {
+            System.out.println("Result:");
+
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product", "Category", "Price", "Stock", "Color", "Size", "Created Date", "Updated Date", "Wish List");
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+            productList.stream().filter(e -> e.getProductName().contains(keyword)).forEach(Product::display);
+        }
     }
 }

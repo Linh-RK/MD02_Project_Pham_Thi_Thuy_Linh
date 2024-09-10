@@ -16,7 +16,7 @@ public class OrderMenu {
             System.out.println("|        1. Hiển thị toàn bộ đơn hàng                                        |");
             System.out.println("|        2. Xem chi tiết đơn hàng theo ID                                    |");
             System.out.println("|        3. Hủy đơn hàng                                                     |");
-            System.out.println("|        4. Tìm kiếm đơn hàng theo ngày tao a -> b                               |");
+            System.out.println("|        4. Tìm kiếm đơn hàng theo ngày tao a -> b                           |");
             System.out.println("|        5. Tìm kiếm đơn hàng theo trạng thái                                |");
             System.out.println("|        6. Tìm kiếm đơn hàng theo mã đơn hàng                               |");
             System.out.println("|        7. Quay lại                                                         |");

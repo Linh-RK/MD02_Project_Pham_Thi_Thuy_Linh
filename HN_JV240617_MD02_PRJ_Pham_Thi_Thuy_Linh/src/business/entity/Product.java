@@ -161,8 +161,8 @@ public class Product {
     }
 
     public void display(){
-        System.out.printf("| %-5d | %-20s | %-15s | %-10f | %-10d |  %-10s | %-10s |  %-10s | %-10s | %-10s |\n ", productId, productName,productCate.getCateName(),productPrice,productStock,productColor,productSize,productCreatedDate,productUpdatedDate,productWishList);
-        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-5d | %-20s | %-15s | %-10f | %-10d |  %-10s | %-10s |  %-12s | %-12s | %-10s |\n ", productId, productName,productCate.getCateName(),productPrice,productStock,productColor,productSize,productCreatedDate,productUpdatedDate,productWishList);
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     private double inputProductPrice(Scanner sc) {

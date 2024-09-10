@@ -1,11 +1,9 @@
 package business.entity;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.*;
+import static business.ultil.enumList.Common.inputPhoneNumber;
 import static business.ultil.enumList.Common.inputString;
 
 public class Address {
@@ -13,17 +11,17 @@ public class Address {
     private int userId;
     private String address;
     private String phoneNumber;
-    private String receiveName;
+    private String receiver;
 
     public Address() {
     }
 
-    public Address(int idAddress, int userId, String address, String phoneNumber, String receiveName) {
+    public Address(int idAddress, int userId, String address, String phoneNumber, String receiver) {
         this.idAddress = idAddress;
         this.userId = userId;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.receiveName = receiveName;
+        this.receiver = receiver;
     }
 
     public int getIdAddress() {
@@ -58,37 +56,42 @@ public class Address {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getReceiveName() {
-        return receiveName;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setReceiveName(String receiveName) {
-        this.receiveName = receiveName;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public void inputAddress(Scanner sc) {
         this.idAddress = autoIdAddress();
         this.userId = currentUser.getUserId();
         this.address = inputAddAddress(sc);
+        this.phoneNumber = inputPhoneNumber(sc);
+        System.out.println("Enter receiver: ");
+        this.receiver = inputString(sc);
     }
 
     public int autoIdAddress() {
         return currentUser.getUserAddressList().stream().map(Address::getIdAddress).max(Integer::compareTo).orElse(0)+1;
     }
 
-    public String inputAddAddress(Scanner sc) {
+    public static String inputAddAddress(Scanner sc) {
+        System.out.println("Enter address: ");
         do {
             String newAddress =  inputString(sc);
-            if(addressList.stream().filter(e->e.getUserId()==userId).anyMatch(a -> a.getAddress().equals(newAddress))) {
-                System.err.println("This address is already exist");
-            }else{
-                return address;
+            if(!currentUser.getUserAddressList().isEmpty()){
+                if(currentUser.getUserAddressList().stream().filter(e->e.getAddress().equalsIgnoreCase(newAddress)).findAny().isPresent()) {
+                    System.err.println("This address is already exist");
+                }else{
+                    return newAddress;
+                }
             }
         }while (true);
     }
     public void displayAddress() {
-        System.out.println("------------------------------------------------------------");
-        System.out.printf("| %-5s | %-10s | %-50s |\n","ID","User ID", "Address");
-        System.out.printf("| %-5s | %-10s | %-50s |\n",this.idAddress,this.userId, this.address);
+        System.out.printf("| %-5s | %-20s | %-15s | %-20s |\n",this.idAddress,this.receiver,this.phoneNumber, this.address);
+        System.out.println("-------------------------------------------------------------------------");
     }
 }

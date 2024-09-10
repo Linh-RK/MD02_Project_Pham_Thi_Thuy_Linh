@@ -30,7 +30,7 @@ public class User {
     }
 
     public User(Role role, int userId, String userName, String userEmail, String userFullName, boolean userStatus,
-                String userPassword, String userPhoneNumber, LocalDate userCreatedDate, LocalDate userUpdatedDate) {
+                String userPassword, String userPhoneNumber, LocalDate userCreatedDate, LocalDate userUpdatedDate,  List<Cart> cartList, List<Address> addresList) {
         this.role = role;
         this.userId = userId;
         this.userName = userName;
@@ -41,6 +41,9 @@ public class User {
         this.userPhoneNumber = userPhoneNumber;
         this.userCreatedDate = userCreatedDate;
         this.userUpdatedDate = userUpdatedDate;
+        this.cartList = cartList;
+        this.userAddressList= addresList;
+
     }
 
 
@@ -175,18 +178,12 @@ public class User {
 //        this.historyOrder = null;
 //        this.cartList = null;
     }
-//    public void login(Scanner sc) {
-//        this.userEmail = inputUserEmail(sc);
-//        this.userPassword = inputUserPassword(sc);
-//    }
     public void updateUserInfo(Scanner sc) {
         this.userName = inputUserName(sc);
         this.userEmail = inputUserEmail(sc);
         System.out.println("Please enter your full name: ");
         this.userFullName = inputString(sc);
-        this.userStatus = inputStatus(sc);
         this.userPassword = inputUserPassword(sc);
-        this.userPhoneNumber = inputPhoneNumber(sc);
 //        this.userCreatedDate = inputUserCreatedDate(sc);
         this.userUpdatedDate = currentDate();
     }
@@ -267,27 +264,34 @@ public class User {
 
 
     public static void displayDetails(User user) {
-        System.out.println("ID: " + user.getUserId());
-        System.out.println("Name: " + user.getUserName());
-        System.out.println("Email: " + user.getUserEmail());
-        System.out.println("FullName: " + user.getUserFullName());
-        System.out.println("Status: " + user.getUserStatus());
-        System.out.println("Password: " + user.getUserPassword());
-        System.out.println("PhoneNumber: " + user.getUserPhoneNumber());
-        System.out.println("CreatedDate: " + user.getUserCreatedDate());
-        System.out.println("UpdatedDate: " + user.getUserUpdatedDate());
+        System.out.printf("| %-15s :| %-30s | \n","ID " , user.getUserId());
+        System.out.printf("| %-15s :| %-30s | \n","Name " , user.getUserName());
+        System.out.printf("| %-15s :| %-30s | \n","Email " , user.getUserEmail());
+        System.out.printf("| %-15s :| %-30s | \n","FullName " , user.getUserFullName());
+        System.out.printf("| %-15s :| %-30s | \n","Status " , user.getUserStatus());
+        System.out.printf("| %-15s :| %-30s | \n","Password " , user.getUserPassword());
+        System.out.printf("| %-15s :| %-30s | \n","PhoneNumber " , user.getUserPhoneNumber());
+        System.out.printf("| %-15s :| %-30s | \n","CreatedDate " , user.getUserCreatedDate());
+        System.out.printf("| %-15s :| %-30s | \n","UpdatedDate " , user.getUserUpdatedDate());
         if(user.getUserAddressList()==null || user.getUserAddressList().isEmpty()){
             System.out.println("Address list is empty");
         }else{
-        System.out.println("AddressList: ");
+        System.out.printf("| %-15s :| %-30s | ","AddressList","");
+            System.out.println("-------------------------------------------------------");
+            System.out.printf("| %-5s | %-10s | %-30s |\n","ID","User ID", "Address");
+            System.out.println("-------------------------------------------------------");
         user.getUserAddressList().forEach(Address::displayAddress);
         }
 
         if(user.getHistoryOrder().isEmpty()||user.getHistoryOrder()==null){
             System.out.println("History order is empty");
         }else{
-            System.out.println("historyOrder: ");
+            System.out.printf("| %-15s :| %-30s | ","HistoryOrder","");
+            System.out.println("--------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
             user.getHistoryOrder().forEach(Order::displayOrder);
+            System.out.println("--------------------------------------------------------------------------------------");
+
         }
 
         if(user.getCartList()==null||user.getCartList().isEmpty()){

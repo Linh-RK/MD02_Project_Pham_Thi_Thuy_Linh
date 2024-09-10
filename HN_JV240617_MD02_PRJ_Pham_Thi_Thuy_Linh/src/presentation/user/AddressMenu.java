@@ -10,10 +10,10 @@ public class AddressMenu {
     public static void addressMenu(Scanner sc) {
         boolean flag = true;
         do {
-            System.out.println("----------------------------------CART MENU-----------------------------------");
+            System.out.println("-------------------------------ADDRESS MENU----------------------------------");
             System.out.println("|                                                                            |");
             System.out.println("|        1. Lấy ra địa chỉ người dùng theo ID                                |");
-            System.out.println("|        2. Hiển thị dang sách địa chỉ người dùng                            |");
+            System.out.println("|        2. Hiển thị sách địa chỉ người dùng                                 |");
             System.out.println("|        3. Xoá địa chỉ theo mã ID                                           |");
             System.out.println("|        4. Thêm địa chỉ mới                                                 |");
             System.out.println("|        5. Quay lại                                                         |");

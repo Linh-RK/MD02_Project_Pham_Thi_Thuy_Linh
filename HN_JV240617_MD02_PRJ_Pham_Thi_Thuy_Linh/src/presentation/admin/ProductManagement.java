@@ -64,7 +64,7 @@ public class ProductManagement {
     public static void sortMenu(Scanner sc) {
         boolean flag = true;
         do {
-            System.out.println("-----------------------------ADMIN PRODUCT SORT-------------------------------");
+            System.out.println("-------------------------------PRODUCT SORT----------------------------------");
             System.out.println("|                                                                            |");
             System.out.println("|        1. Sắp xếp theo giá tăng dần                                        |");
             System.out.println("|        2. Sắp xếp theo giá giảm dần                                        |");
@@ -109,6 +109,10 @@ public class ProductManagement {
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
+            System.out.println("Product list sorted by price increasing");
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
             productList.stream().sorted(Comparator.comparing(Product::getProductPrice)).forEach(Product::display);
         }
     }
@@ -118,15 +122,24 @@ public class ProductManagement {
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
+            System.out.println("Product list sorted by price decreasing");
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
             productList.stream().sorted(Comparator.comparing( Product::getProductPrice)).toList().reversed().forEach(Product::display);
         }
     }
 
     private static void sortNameIncrease() {
+
 //        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
+            System.out.println("Product list sorted by name increasing");
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
             productList.stream().sorted(Comparator.comparing( Product::getProductName)).forEach(Product::display);
         }
     }
@@ -136,7 +149,12 @@ public class ProductManagement {
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
+            System.out.println("Product list sorted by name decreasing");
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
             productList.stream().sorted(Comparator.comparing( Product::getProductName)).toList().reversed().forEach(Product::display);
         }
     }
 }
+

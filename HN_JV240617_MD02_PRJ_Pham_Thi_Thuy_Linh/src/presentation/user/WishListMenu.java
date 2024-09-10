@@ -22,7 +22,7 @@ public class WishListMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    WishListService.showAll(sc,currentUser);
+                    WishListService.showAllWishList(sc,currentUser);
                     break;
                 }
                 case "2":{

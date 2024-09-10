@@ -131,46 +131,54 @@ public class Order {
         this.orderId = autoOrderId();
         this.orderSerial = inputOrderSerial(sc);//random
         this.userId = currentUser.getUserId();
-        this.orderCartList = inputCartList(sc);//
+        this.orderCartList = inputCartList();//
         this.orderStatus = OrderStatus.WAITING;
         this.orderTotal = inputOrderTotal(sc);//
         this.orderCreateDate = currentDate();
-        this.orderReceiveAddress = inputAddress(sc);
-        this.orderReceiveName = inputString(sc);
-        this.orderReceivePhone = inputPhone(sc);
+        this.orderReceiveAddress = addAddress(sc);
         this.orderUpdatedDate = currentDate();
     }
 
-    private Address inputAddress(Scanner sc) {
-        System.out.println("Address List:");
+    private Address addAddress(Scanner sc) {
         showAllAddress(currentUser);
-        System.out.println((currentUser.getUserAddressList().size()+1)+ ". Add new address");
-        do {
-            int addressId = inputNum(sc);
-            if(currentUser.getUserAddressList().stream().anyMatch(e->e.getIdAddress()==addressId)){
-//            if id exist
-                return currentUser.getUserAddressList().stream().filter(e->e.getIdAddress()==addressId).findFirst().get();
-            }else {
-//            id = add new
-                if(addressId==(currentUser.getUserAddressList().size()+1)){
-                    Address newAddress = inputAddress(sc);
-                    currentUser.getUserAddressList().add(newAddress);
+        Address newAddress = new Address();
+        if(currentUser.getUserAddressList().isEmpty()) {
+            System.err.println("Address list is empty. Please add new address");
+            newAddress.inputAddress(sc);
+            currentUser.getUserAddressList().add(newAddress);
 //                    update userList
-                    userList.set(currentIndex, currentUser);
-                    return newAddress;
-                }else{
-                    System.err.println("Invalid choice. Please try again");
+            userList.set(currentIndex, currentUser);
+            System.out.println("Address list");
+            currentUser.getUserAddressList().forEach(Address::displayAddress);
+            return newAddress;
+        }else {
+            System.out.println((currentUser.getUserAddressList().getLast().getIdAddress() + 1) + ". Add new address");
+            System.out.println("Enter your choice:");
+            int addressId = inputNum(sc);
+            if(addressId == currentUser.getUserAddressList().getLast().getIdAddress() + 1) {
+                newAddress.inputAddress(sc);
+                currentUser.getUserAddressList().add(newAddress);
+//                    update userList
+                userList.set(currentIndex, currentUser);
+                System.out.println("Address list");
+                currentUser.getUserAddressList().forEach(Address::displayAddress);
+                return newAddress;
+            }else{
+                if(currentUser.getUserAddressList().stream().anyMatch(e->e.getIdAddress()==addressId)) {
+                    return currentUser.getUserAddressList().stream().filter(e->e.getIdAddress()==addressId).findFirst().get();
+                }else {
+                    System.err.println("Address not found. Please try again");
                 }
             }
-        }while(true);
+        }
+        return newAddress;
     }
 
-
-    public List<Cart> inputCartList(Scanner sc) {
-        List<Cart> orderCartList = currentUser.getCartList();
-        currentUser.getCartList().clear();
-        userList.set(currentIndex, currentUser);
-        return orderCartList;
+    public List<Cart> inputCartList() {
+        List<Cart> orderProductList = currentUser.getCartList();
+//        currentUser.getCartList().clear();
+//        userList.set(currentIndex, currentUser);
+        return orderProductList;
     }
 
     public String inputPhone(Scanner sc) {
@@ -211,32 +219,37 @@ public class Order {
         return currentUser;
     }
 
-//    public Product inputProduct(Scanner sc) {
-////        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
-//        System.out.println("Product List");
-//        productList.forEach(Product::display);
-//        System.out.println("Enter product ID you want to add to cart: ");
-//        int productId = inputNum(sc);
-//        do {
-//            if(productList.stream().noneMatch(product -> product.getProductId() == productId)){
-//                System.err.println("Product ID does not exist.Please try again.");
-//            }else{
-//                return productList.stream().filter(product -> product.getProductId() == productId).findFirst().get();
-//            }
-//        }while (true);
-//    }
-
     public int inputOrderTotal(Scanner sc) {
 //        List<Order> orderList= IOFile.readObjectFromFile("src/business/data/order.txt");
         return orderList.stream().mapToInt(Order::getOrderTotal).sum();
     }
 
     public void displayOrder() {
-        System.out.println("------------------------------------------------------------------------");
-        System.out.printf("| %-5d | %-10s | %-5s | %-10d | %-10s |%-10s | \n", this.orderId,this.orderSerial,this.userId,this.orderTotal,this.orderStatus,this.orderCreateDate);
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("| %-5d | %-10s | %-7s | %-10d | %-10s |%-13s | \n", this.orderId,this.orderSerial,this.userId,this.orderTotal,this.orderStatus,this.orderCreateDate);
 
     }
-
+    public  void displayOrderDetails() {
+        System.out.println("YOUR ORDER:");
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34d |\n", "ID: ", this.orderId);
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34s |\n", "Serial: ", this.orderSerial);
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34s |\n", "Product List: ", "");
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n", "ID", "Product", "Qty", "Price", "Total");
+        this.orderCartList.forEach(Cart::displayCart);
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34d |\n", "Total: ", this.orderTotal);
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34s |\n", "Receive Address: ", this.orderReceiveAddress.getAddress());
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34s |\n", "Receive person: ", this.orderReceiveAddress.getReceiver());
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-34s |\n", "Receive phone number: ", this.orderReceiveAddress.getPhoneNumber());
+        System.out.println("------------------------------------------------------------------");
+    }
     @Override
     public String toString() {
         return "Order{" +"\n"+
