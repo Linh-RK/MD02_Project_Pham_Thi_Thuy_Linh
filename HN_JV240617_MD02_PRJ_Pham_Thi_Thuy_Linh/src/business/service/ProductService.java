@@ -66,7 +66,6 @@ public class ProductService {
             System.err.println("No result matching keyword " + keyword);
         }else {
             System.out.println("Result:");
-
             System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product", "Category", "Price", "Stock", "Color", "Size", "Created Date", "Updated Date", "Wish List");
             System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");

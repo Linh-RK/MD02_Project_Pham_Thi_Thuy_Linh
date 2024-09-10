@@ -10,6 +10,7 @@ import java.util.Scanner;
 import static business.Data.categoryList;
 import static business.Data.productList;
 import static business.ultil.enumList.Common.inputNum;
+import static business.ultil.enumList.Common.inputString;
 
 public class CategoryService {
     public static void addCategory(Scanner sc) {
@@ -29,7 +30,7 @@ public class CategoryService {
             System.err.println("Category list is empty");
         }else{
             System.out.println("------------------------------------------------------------------------------");
-            System.out.printf("| %-5s | %-15s | %-10s | %-50s |\n","ID","Category","Status","Description");
+            System.out.printf("| %-5s | %-15s | %-10s | %-35s |\n","ID","Category","Status","Description");
             categoryList.forEach(Category::displayCategory);
             System.out.println("------------------------------------------------------------------------------");
         }
@@ -64,22 +65,24 @@ public class CategoryService {
     public static void searchCate(Scanner sc) {
 //        List<Category> categoryList= IOFile.readObjectFromFile("src/business/data/category.txt");
         System.out.println("Please enter search keys:");
-            String key = sc.nextLine();
-            if(key.isBlank()){
-                System.err.println("Search key is blank. Please try again");
+            String key = inputString(sc);
+            if(categoryList.stream().noneMatch(e->e.getCateName().contains(key))){
+                System.err.println("No result match");
             }else{
-                if(categoryList.stream().noneMatch(e->e.getCateName().contains(key))){
-                    System.err.println("No result match");
-                }else{
-                    System.out.println("Result:");
-                    categoryList.stream().filter(e->e.getCateName().contains(key)).toList().forEach(Category::displayCategory);
-                }
+                System.out.println("Result:");
+                System.out.println("------------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-15s | %-10s | %-35s |\n","ID","Category","Status","Description");
+                categoryList.stream().filter(e->e.getCateName().contains(key)).toList().forEach(Category::displayCategory);
+                System.out.println("------------------------------------------------------------------------------");
             }
     }
     public static void sortCate(Scanner sc) {
 //        List<Category> categoryList= IOFile.readObjectFromFile("src/business/data/category.txt");
 //		categories.stream().sorted((a,b)-> a.getCateName().compareTo(b.getCateName())).forEach(Category::displayCategory);
+        System.out.println("Result sort by name increasing order:");
+        System.out.println("------------------------------------------------------------------------------");
+        System.out.printf("| %-5s | %-15s | %-10s | %-35s |\n","ID","Category","Status","Description");
         categoryList.stream().sorted(Comparator.comparing(Category::getCateName)).forEach(Category::displayCategory);
-
+        System.out.println("------------------------------------------------------------------------------");
     }
 }

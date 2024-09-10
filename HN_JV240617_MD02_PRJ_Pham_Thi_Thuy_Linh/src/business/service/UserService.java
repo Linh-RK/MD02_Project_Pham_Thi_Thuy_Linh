@@ -15,10 +15,10 @@ public class UserService {
             System.err.println("User list is empty");
         }else {
 
-            System.out.println("-----------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
             System.out.printf("| %-5s | %-20s | %-20s | %-10s | %-20s | %-20s |\n", "ID", "Name", "Email", "Status", "PhoneNumber", "CreatedDate");
             userList.forEach(User::displayUser);
-            System.out.println("-----------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
         }
     }
     public static void changeUserStatus(Scanner sc){
@@ -50,10 +50,10 @@ public class UserService {
                 System.err.println("User ID does not exist");
             }else{
                 System.out.println("Result:");
-                System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------");
-                System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");
-                System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------");
+                System.out.println("------------------------------------------------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-20s | %-20s | %-10s | %-20s | %-20s |\n", "ID", "Name", "Email", "Status", "PhoneNumber", "CreatedDate");
                 userList.stream().filter(e->e.getUserId()==id).findFirst().get().displayUser();
+                System.out.println("------------------------------------------------------------------------------------------------------------------");
             }
     }
     public static void sortUserByNameIncrease(){

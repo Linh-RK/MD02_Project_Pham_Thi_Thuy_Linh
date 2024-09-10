@@ -230,6 +230,10 @@ public class Order {
 
     }
     public  void displayOrderDetails() {
+        int total = 0;
+        for(Cart cart : this.orderCartList) {
+            total += (int) (cart.getQty()*cart.getProductInCart().getProductPrice());
+        }
         System.out.println("YOUR ORDER:");
         System.out.println("------------------------------------------------------------------");
         System.out.printf("| %-25s | %-34d |\n", "ID: ", this.orderId);
@@ -241,7 +245,7 @@ public class Order {
         System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n", "ID", "Product", "Qty", "Price", "Total");
         this.orderCartList.forEach(Cart::displayCart);
         System.out.println("------------------------------------------------------------------");
-        System.out.printf("| %-25s | %-34d |\n", "Total: ", this.orderTotal);
+        System.out.printf("| %-25s | %-34d |\n", "Total: ",total );
         System.out.println("------------------------------------------------------------------");
         System.out.printf("| %-25s | %-34s |\n", "Receive Address: ", this.orderReceiveAddress.getAddress());
         System.out.println("------------------------------------------------------------------");

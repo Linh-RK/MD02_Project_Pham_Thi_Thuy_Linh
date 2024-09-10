@@ -90,7 +90,6 @@ public class Main_Menu {
         userList.add(user3);
         userList.add(user4);
         userList.add(user5);
-        userList.add(user5);
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -163,8 +162,12 @@ public class Main_Menu {
                 System.out.println("Login Successful");
                 if(currentUser.getRole()==Role.ADMIN){
                     Admin_Menu(sc);
-                }else{
-                    UserMenuDisplay(sc);
+                }else if(currentUser.getRole()==Role.USER){
+                    if(!currentUser.getUserStatus()){
+                        System.err.println("Your account has been locked");
+                    }else {
+                        UserMenuDisplay(sc);
+                    }
                 }
             }
         }

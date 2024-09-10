@@ -264,19 +264,29 @@ public class User {
 
 
     public static void displayDetails(User user) {
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","ID " , user.getUserId());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","Name " , user.getUserName());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","Email " , user.getUserEmail());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","FullName " , user.getUserFullName());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","Status " , user.getUserStatus());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","Password " , user.getUserPassword());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","PhoneNumber " , user.getUserPhoneNumber());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","CreatedDate " , user.getUserCreatedDate());
+        System.out.println("-------------------------------------------------------");
         System.out.printf("| %-15s :| %-30s | \n","UpdatedDate " , user.getUserUpdatedDate());
+        System.out.println("-------------------------------------------------------");
         if(user.getUserAddressList()==null || user.getUserAddressList().isEmpty()){
             System.out.println("Address list is empty");
         }else{
-        System.out.printf("| %-15s :| %-30s | ","AddressList","");
+        System.out.printf("| %-15s :| %-30s |\n","AddressList","");
             System.out.println("-------------------------------------------------------");
             System.out.printf("| %-5s | %-10s | %-30s |\n","ID","User ID", "Address");
             System.out.println("-------------------------------------------------------");
@@ -297,13 +307,13 @@ public class User {
         if(user.getCartList()==null||user.getCartList().isEmpty()){
             System.out.println("Cart is empty");
         }else{
-            System.out.println("cartList: ");
+            System.out.println("CartList: ");
             user.getCartList().forEach(Cart::displayCart);
         }
 
     }
     public  void displayUser() {
-        System.out.println("--------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
         System.out.printf("| %-5d | %-20s | %-20s | %-10s | %-20s | %-20s |\n",this.userId,this.userName,this.userEmail,this.userStatus?"Active":"Block",this.userPhoneNumber,this.userCreatedDate);
     }
     public static void switchUserStatus(Scanner sc, User user){

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.*;
+import static business.Data.orderList;
 import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 import static presentation.admin.OrderManagement.orderManagement;
@@ -20,6 +21,8 @@ public class OrderService {
         System.out.println("Check out:");
         Order orderCheckOut = new Order();
         orderCheckOut.inputOrder(sc);
+        int n = orderCheckOut.getOrderCartList().size();
+        System.out.println("so san pham trong order "+ n);
         System.err.println("Please confirm your order:");
         orderCheckOut.displayOrderDetails();
         System.err.println("Enter your choice (Y/N):");
@@ -63,7 +66,11 @@ public class OrderService {
             if (orderList.stream().noneMatch(e -> e.getOrderId() == id)) {
                 System.err.println("Order ID not found");
             } else {
+                System.out.println("Result");
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-11s | \n", "ID", "Serial", "User ID", "Total", "Status", "Created Date");
                 orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrder);
+                System.out.println("--------------------------------------------------------------------------");
             }
         }
     }
@@ -79,19 +86,18 @@ public class OrderService {
             if (!isExistInEnum(status)) {
                 System.err.println("Order status not found");
             } else {
+                System.out.println(status);
                 System.out.println("Result");
+                System.out.println("--------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
                 orderList.stream().filter(e -> e.getOrderStatus().name().equalsIgnoreCase(status)).forEach(Order::displayOrder);
-            }
+                System.out.println("--------------------------------------------------------------------------");
+                }
         }
     }
 
     private static boolean isExistInEnum(String status) {
-        for (OrderStatus c : OrderStatus.values()) {
-            if (c.name().equalsIgnoreCase(status.toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
+        return currentUser.getHistoryOrder().stream().map(e->e.getOrderStatus()).toList().stream().anyMatch(e->e.name().equalsIgnoreCase(status));
     }
 
     public static void orderDetailById(Scanner sc, List<Order> orderList){
@@ -252,15 +258,15 @@ public class OrderService {
                 System.err.println("None order found");
             }else {
                 System.out.println("Result");
-                System.out.println("----------------------------------------------------------------");
-                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n", "ID", "Serial", "User ID", "Total", "Status", "Created Date");
+                System.out.println("--------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-11s | \n", "ID", "Serial", "User ID", "Total", "Status", "Created Date");
                 resultOrder.forEach(Order::displayOrder);
-                System.out.println("----------------------------------------------------------------");
+                System.out.println("--------------------------------------------------------------------------");
             }
         }
     }
 
-    public static void showDetailById(Scanner sc, List<Order> orderList) {
+    public static void showDetailById(Scanner sc,List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -270,8 +276,9 @@ public class OrderService {
             if (orderList.stream().noneMatch(e -> e.getOrderId() == id)) {
                 System.err.println("Order ID not found");
             }else {
+                System.out.println("Result");
                 orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrderDetails);
-            }
+                }
         }
     }
 

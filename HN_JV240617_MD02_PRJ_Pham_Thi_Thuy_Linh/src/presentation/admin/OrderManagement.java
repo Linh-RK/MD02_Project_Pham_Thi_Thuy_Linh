@@ -1,5 +1,6 @@
 package presentation.admin;
 
+import business.entity.Order;
 import business.service.OrderService;
 
 import java.util.Scanner;
@@ -24,7 +25,7 @@ public class OrderManagement {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    OrderService.showAllOrder(orderList);
+                    OrderService.showAllOrder( orderList);
                     break;
                 }
                 case "2":{

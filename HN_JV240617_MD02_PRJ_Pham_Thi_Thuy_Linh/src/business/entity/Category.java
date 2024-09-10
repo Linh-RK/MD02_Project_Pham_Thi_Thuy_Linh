@@ -94,7 +94,7 @@ public class Category {
 
     public void displayCategory() {
         System.out.println("------------------------------------------------------------------------------");
-        System.out.printf("| %-5d | %-15s | %-10s | %-50s |\n",cateId,cateName,cateStatus?"Active":"Block",cateDescription);
+        System.out.printf("| %-5d | %-15s | %-10s | %-35s |\n",cateId,cateName,cateStatus?"Active":"Block",cateDescription);
 
     }
 }
