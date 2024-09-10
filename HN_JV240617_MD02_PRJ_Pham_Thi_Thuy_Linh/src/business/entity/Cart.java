@@ -62,7 +62,7 @@ public class Cart {
 
     public void displayCart(){
         System.out.println("--------------------------------------------------------------------------------------");
-        System.out.printf("| %-15d | %-20s | %-5d | %-15f | %-15f |\n",productInCart.getProductId(), productInCart.getProductName(), cart.getQty(), productInCart.getProductPrice(), productInCart.getProductPrice()*qty);
+        System.out.printf("| %-15d | %-20s | %-5d | %-15f | %-15f |\n",this.productInCart.getProductId(), this.productInCart.getProductName(), this.qty, this.productInCart.getProductPrice(), this.productInCart.getProductPrice()*qty);
 
     }
 }

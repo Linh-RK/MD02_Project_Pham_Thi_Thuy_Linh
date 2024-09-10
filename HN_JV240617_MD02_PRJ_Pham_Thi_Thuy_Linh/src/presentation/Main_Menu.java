@@ -18,8 +18,7 @@ import static presentation.admin.AdminMenu.Admin_Menu;
 import static presentation.user.UserMenu.UserMenuDisplay;
 
 public class Main_Menu {
-    public static void main(String[] args) {
-
+    static {
         Category category1 = new Category(1,"cate1",true, "description1");
         Category category2 = new Category(2,"cate2",true, "description2");
         Category category3 = new Category(3,"cate3",true, "description2");
@@ -54,6 +53,8 @@ public class Main_Menu {
         userList.add(user4);
         userList.add(user5);
 
+    }
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
         do {

@@ -18,7 +18,7 @@ public static void showAllCart(User user) {
    }else{
 
       System.out.println("--------------------------------------------------------------------------------------");
-      System.out.printf("| %15s | %20s | %5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
+      System.out.printf("| %-15s | %-20s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
       user.getCartList().forEach(Cart::displayCart);
       System.out.println("--------------------------------------------------------------------------------------");
    }
@@ -26,38 +26,51 @@ public static void showAllCart(User user) {
 }
 public static void addToCart(Scanner sc,User user) {
    Cart cartNew = new Cart();
+   int quantity ;
+   int productID;
    showAllProduct();
    System.out.println("Enter product ID you want to add to cart: ");
+
    do {
-      int productID = inputNum(sc);
-         if(productList.stream().noneMatch(p->p.getProductId()==productID)) {
+       productID = inputNum(sc);
+      int finalProductID = productID;
+      if(productList.stream().noneMatch(p->p.getProductId()== finalProductID)) {
             System.err.println("Product ID does not match");
          }else {
-            Product productAdd = productList.stream().filter(p->p.getProductId()==productID).toList().getFirst();
+         int finalProductID1 = productID;
+         Product productAdd = productList.stream().filter(p->p.getProductId()== finalProductID1).toList().getFirst();
             System.out.println("Enter quantity of product you want to add to cart: ");
+
             do {
-               int quantity = inputNum(sc);
+               quantity = inputNum(sc);
+               System.out.println(quantity);
                if(quantity > productAdd.getProductStock()) {
-                  System.out.println("SORRY ! we don't have enough product in stock to add to cart");
+                  System.err.println("SORRY ! we don't have enough product in stock to add to cart");
                }else {
-//                  Product already in cart
-
-                  if(currentUser.getCartList().stream().anyMatch(p->p.getProductInCart().getProductId()==productID)){
-                     Cart cartOld = currentUser.getCartList().stream().filter(p->p.getProductInCart().getProductId()==productID).findFirst().get();
+                  int finalProductID2 = productID;
+                  if(currentUser.getCartList().stream().anyMatch(p->p.getProductInCart().getProductId()== finalProductID2)){
+                     int finalProductID3 = productID;
+                     Cart cartOld = currentUser.getCartList().stream().filter(p->p.getProductInCart().getProductId()== finalProductID3).findFirst().get();
                      cartOld.setQty(cartOld.getQty() + quantity);
-//                     update lai userList
-//                     index of currentUser in userList
                      userList.set(currentIndex,currentUser);
-                     showAllCart(user);
-                     return;
-                  }else{
-//                     Product not exist in cart
 
+                  }else{
                      cartNew.setProductInCart(productAdd);
                      cartNew.setQty(quantity);
-                     currentUser.getCartList().add(cartNew);
                      cartNew.getProductInCart().setProductStock(productAdd.getProductStock() - quantity);
+//                     System.out.println(cartNew.getQty());
+                     currentUser.getCartList().add(cartNew);
+                     currentUser.setCartList(currentUser.getCartList());
+                     userList.set(currentIndex,currentUser);
+
+//                     int finalProductID4 = productID;
+//                     System.out.println("Product stock");
+//                     System.out.println(userList.get(currentIndex).getCartList().stream().filter(e->e.getProductInCart().getProductId()== finalProductID4).findFirst().get().getProductInCart().getProductStock());
+//                     System.out.println("Cart qty");
+//                     System.out.println(userList.get(currentIndex).getCartList().stream().filter(e->e.getProductInCart().getProductId()== finalProductID4).findFirst().get().getQty());
+
                   }
+                  currentUser=userList.get(currentIndex);
                   System.out.println("Added product to the cart");
                   showAllCart(currentUser);
                   return;
@@ -76,7 +89,11 @@ public static void changeQtyProductInCart(Scanner sc, User user) {
          Product productOld = productOldCart.getProductInCart();
 //              Display
          System.out.println("Product you want to edit: ");
+         System.out.println("--------------------------------------------------------------------------------------");
+         System.out.printf("| %-15s | %-20s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
          productOldCart.displayCart();
+         System.out.println("--------------------------------------------------------------------------------------");
+
          System.out.println("Enter new quantity of product you want to edit: ");
          int quantity = inputNum(sc);
 
