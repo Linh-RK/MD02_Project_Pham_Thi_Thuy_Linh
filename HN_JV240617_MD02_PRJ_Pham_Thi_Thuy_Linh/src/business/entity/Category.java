@@ -1,5 +1,6 @@
 package business.entity;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Scanner;
 
@@ -7,7 +8,7 @@ import static business.Data.categoryList;
 import static business.ultil.enumList.Common.inputStatus;
 import static business.ultil.enumList.Common.inputString;
 
-public class Category {
+public class Category implements Serializable {
     private int cateId;
     private String cateName;
     private String  cateDescription;

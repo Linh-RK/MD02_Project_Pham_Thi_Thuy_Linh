@@ -1,5 +1,6 @@
 package business.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -8,7 +9,7 @@ import static business.Data.*;
 import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 
-public class Product {
+public class Product implements Serializable {
     private int productId;
     private String productName;
     private String productDescription;

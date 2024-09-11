@@ -1,12 +1,13 @@
 package business.entity;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static business.Data.*;
 import static business.ultil.enumList.Common.inputPhoneNumber;
 import static business.ultil.enumList.Common.inputString;
 
-public class Address {
+public class Address implements Serializable {
     private int idAddress;
     private int userId;
     private String address;

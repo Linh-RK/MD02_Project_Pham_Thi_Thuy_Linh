@@ -1,51 +1,71 @@
 package business.service;
 
 import business.entity.*;
+import business.ultil.enumList.IOFile;
 import business.ultil.enumList.OrderStatus;
 import business.ultil.enumList.Role;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.*;
-import static business.Data.orderList;
 import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 import static presentation.admin.OrderManagement.orderManagement;
 import static presentation.user.CartMenu.cartMenu;
 
-public class OrderService {
-    public static void addOrderCheckOut(Scanner sc) {
-        System.out.println("Check out:");
-        Order orderCheckOut = new Order();
-        orderCheckOut.inputOrder(sc);
-        int n = orderCheckOut.getOrderCartList().size();
-        System.out.println("so san pham trong order "+ n);
-        System.err.println("Please confirm your order:");
-        orderCheckOut.displayOrderDetails();
-        System.err.println("Enter your choice (Y/N):");
-        String answer = inputAnswer(sc);
-        if (answer.equalsIgnoreCase("Y")) {
-//            subtract qty from stock
-//            orderCheckOut.getOrderCartList().forEach()
-            Product p;
-           for(Cart cart : orderCheckOut.getOrderCartList()){
-               p =cart.getProductInCart();
-               p.setProductStock(p.getProductStock() - cart.getQty());
-           }
-//           khong biet da cap nhat len tren userList chua
-            orderList.add(orderCheckOut);
-            currentUser.getCartList().clear();
-            userList.set(currentIndex, currentUser);
-            System.out.println("Order successfully, thank you");
-        }else{
-            System.out.println("Canceled order");
-            cartMenu(sc);
-        }
+public class OrderService implements Serializable {
 
-//        showAllCategory();
+    public static void addOrderCheckOut(Scanner sc,List<Cart> cartList) {
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
+        currentUser = userList.get(currentIndex);
+        if(cartList.isEmpty()) {
+            System.err.println("Cart is empty, please add product to the cart");
+        }else {
+            System.out.println("Check out:");
+            Order orderCheckOut = new Order();
+            orderCheckOut.inputOrder(sc, cartList);
+            int n = orderCheckOut.getOrderCartList().size();
+            System.out.println("so san pham trong order " + n);
+            System.err.println("Please confirm your order:");
+            orderCheckOut.displayOrderDetails();
+            System.err.println("Enter your choice (Y/N):");
+            String answer = inputAnswer(sc);
+            if (answer.equalsIgnoreCase("Y")) {
+//            subtract qty from stock
+                System.out.println("product in order "+orderCheckOut.getOrderCartList().size());
+                Product p;
+                int indexProduct;
+                for (Cart cart : orderCheckOut.getOrderCartList()) {
+                    p = productList.stream().filter(e->e.getProductId()==cart.getProductInCart().getProductId()).findFirst().get();
+                    indexProduct= productList.indexOf(p);
+                    p.setProductStock(p.getProductStock() - cart.getQty());
+                    productList.set(indexProduct, p);
+                    IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
+                }
+//           khong biet da cap nhat len tren userList chua
+                orderList.add(orderCheckOut);
+                System.out.println("Danh sach order");
+                System.out.println("--------------------------------------------------------------------------");
+                System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-11s | \n", "ID", "Serial", "User ID", "Total", "Status", "Created Date");
+                orderList.forEach(Order::displayOrder);
+                System.out.println("--------------------------------------------------------------------------");
+                IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
+                currentUser.getCartList().clear();
+//                -----
+                userList.set(currentIndex, currentUser);
+                IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
+                System.out.println("Order successfully, thank you");
+            } else {
+                System.out.println("Canceled order");
+                cartMenu(sc);
+            }
+        }
     }
     public static void showAllOrder(List<Order> orderList){
         if(orderList == null || orderList.isEmpty()){
@@ -53,7 +73,7 @@ public class OrderService {
         }else {
         System.out.println("--------------------------------------------------------------------------");
         System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
-        orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).forEach(Order::displayOrder);
+        orderList.forEach(Order::displayOrder);
         System.out.println("--------------------------------------------------------------------------");
         }
     }
@@ -83,7 +103,7 @@ public class OrderService {
                 System.out.println(element);
             System.out.println("Please enter the order status you want to search");
             String status = inputString(sc);
-            if (!isExistInEnum(status)) {
+            if (!isExistInEnum(status,orderList)) {
                 System.err.println("Order status not found");
             } else {
                 System.out.println(status);
@@ -96,11 +116,13 @@ public class OrderService {
         }
     }
 
-    private static boolean isExistInEnum(String status) {
-        return currentUser.getHistoryOrder().stream().map(e->e.getOrderStatus()).toList().stream().anyMatch(e->e.name().equalsIgnoreCase(status));
+    private static boolean isExistInEnum(String status,List<Order> orderList) {
+        return orderList.stream().map(Order::getOrderStatus).toList().stream().anyMatch(e->e.name().equalsIgnoreCase(status));
     }
 
-    public static void orderDetailById(Scanner sc, List<Order> orderList){
+    public static void orderDetailById(Scanner sc){
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -110,27 +132,30 @@ public class OrderService {
                 System.err.println("Order ID not found");
             } else {
                 System.out.println("Result");
-                orderList.stream().filter(e -> e.getOrderId() == id).forEach(e -> e.toString());
+                orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrderDetails);
             }
         }
     };
-    public static void cancelOrder(Scanner sc, List<Order> orderList){
-        if(orderList == null || orderList.isEmpty()){
+    public static void cancelOrder(Scanner sc, List<Order> order){
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+        if(order == null || order.isEmpty()){
             System.err.println("Order list is empty");
         }else {
             System.out.println("Please enter the order ID you want to show change status");
             int id = inputNum(sc);
-            if (orderList.stream().noneMatch(e -> e.getOrderId() == id)) {
+            if (order.stream().noneMatch(e -> e.getOrderId() == id)) {
                 System.err.println("Order ID not found");
             } else {
-                if (orderList.stream().filter(e -> e.getOrderId() == id).findFirst().get().getOrderStatus().equals(OrderStatus.WAITING)) {
+                Order orderFind = orderList.stream().filter(e -> e.getOrderId() == id).findFirst().get();
+                int indexOrder = orderList.indexOf(orderFind);
+                if (orderFind.getOrderStatus().equals(OrderStatus.WAITING)) {
                     System.out.println("Do you want to cancel this order ?");
                     System.out.println("(Y/N)");
                     String answer = inputAnswer(sc);
                     if (answer.equalsIgnoreCase("y")) {
-                        orderList.stream().filter(e -> e.getOrderId() == id).findFirst().get().setOrderStatus(OrderStatus.CANCEL);
-//                    update lai ca currentUser
-//                    currentUser.getHistoryOrder() =  orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList();
+                        orderFind.setOrderStatus(OrderStatus.CANCEL);
+                        orderList.set(indexOrder, orderFind);
+                        IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                     } else if (answer.equalsIgnoreCase("n")) {
                         orderManagement(sc);
                     }
@@ -138,7 +163,8 @@ public class OrderService {
             }
         }
     }
-    public static void changeOrderStatus(Scanner sc, List<Order> orderList){
+    public static void changeOrderStatus(Scanner sc){
+        List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -148,6 +174,9 @@ public class OrderService {
                 System.err.println("Order ID not found");
             } else {
                 Order orderChange = orderList.stream().filter(e -> e.getOrderId() == id).findFirst().get();
+                int idProduct;
+                int orderIndex =orderList.indexOf(orderChange);
+                Product p;
                 if (orderChange.getOrderStatus().equals(OrderStatus.WAITING)) {
                     System.out.println("Enter the new order status");
                     System.out.println("1.  CONFIRM");
@@ -160,16 +189,25 @@ public class OrderService {
                     switch (answer) {
                         case "1": {
                             orderChange.setOrderStatus(OrderStatus.CONFIRM);
+                            orderList.set(orderIndex, orderChange);
+                            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                             System.out.println("Confirm order successfully");
                             break;
                         }
                         case "2": {
                             orderChange.setOrderStatus(OrderStatus.CANCEL);
+                            orderList.set(orderIndex, orderChange);
+                            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
 //                      update lai gio hang
                             List<Cart> cancelCart = orderChange.getOrderCartList();
+
                             for (Cart cart : cancelCart) {
-                                Product p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
+                                List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
+                                 p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
                                 p.setProductStock(p.getProductStock() + cart.getQty());
+                                idProduct = productList.indexOf(p);
+                                productList.set(idProduct, p);
+                                IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
                             }
                             System.out.println("Cancel order successfully");
                             showAllProduct();
@@ -183,7 +221,8 @@ public class OrderService {
                             break;
                         }
                     }
-                } else if (orderChange.getOrderStatus().equals(OrderStatus.CONFIRM)) {
+                }
+                else if (orderChange.getOrderStatus().equals(OrderStatus.CONFIRM)) {
                     System.out.println("Enter the new order status");
                     System.out.println("1.  DELIVERY");
                     System.out.println("2.  BACK");
@@ -194,6 +233,8 @@ public class OrderService {
                     switch (answer) {
                         case "1": {
                             orderChange.setOrderStatus(OrderStatus.DELIVERY);
+                            orderList.set(orderIndex, orderChange);
+                            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                             break;
                         }
                         case "2": {
@@ -204,7 +245,8 @@ public class OrderService {
                             break;
                         }
                     }
-                } else if (orderChange.getOrderStatus().equals(OrderStatus.DELIVERY)) {
+                }
+                else if (orderChange.getOrderStatus().equals(OrderStatus.DELIVERY)) {
                     System.out.println("Enter the new order status");
                     System.out.println("1.  SUCCESS");
                     System.out.println("2.  DENIED");
@@ -216,15 +258,22 @@ public class OrderService {
                     switch (answer) {
                         case "1": {
                             orderChange.setOrderStatus(OrderStatus.SUCCESS);
+                            orderList.set(orderIndex, orderChange);
+                            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                             System.out.println("Order successfully");
                             break;
                         }
                         case "2": {
                             orderChange.setOrderStatus(OrderStatus.DENIED);
+                            orderList.set(orderIndex, orderChange);
+                            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                             List<Cart> cancelCart = orderChange.getOrderCartList();
                             for (Cart cart : cancelCart) {
-                                Product p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
+                                p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
                                 p.setProductStock(p.getProductStock() + cart.getQty());
+                                idProduct = productList.indexOf(p);
+                                productList.set(idProduct, p);
+                                IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
                             }
                             System.out.println("Order be delivery failed");
                             showAllProduct();

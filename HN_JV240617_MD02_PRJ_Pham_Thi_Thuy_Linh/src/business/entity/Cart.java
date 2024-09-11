@@ -1,25 +1,38 @@
 package business.entity;
 
+import business.service.ProductService;
+
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static business.Data.*;
 import static business.ultil.enumList.Common.inputNum;
 
-public class Cart {
+public class Cart implements Serializable {
     private int userId;
     private Product productInCart;
     private int qty;
+    private double total;
 
     public Cart() {
     }
 
-    public Cart(int userId,Product productInCart, int qty) {
+    public Cart(int userId,Product productInCart, int qty,double total) {
         this.productInCart = productInCart;
         this.qty = qty;
+        this.total = this.productInCart.getProductPrice()*this.qty;
     }
 
     public Product getProductInCart() {
         return productInCart;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     public void setProductInCart(Product productInCart) {
@@ -47,7 +60,7 @@ public class Cart {
     }
 
     private Product inputProductInCart(Scanner sc) {
-        productService.showAllProduct();
+        ProductService.showAllProduct();
 //        showAllProduct();
         System.out.println("Enter product id from list before: ");
         do {
@@ -63,6 +76,7 @@ public class Cart {
     public void displayCart(){
         System.out.println("------------------------------------------------------------------");
         System.out.printf("| %-5d | %-10s | %-5d | %-15f | %-15f |\n",this.productInCart.getProductId(), this.productInCart.getProductName(), this.qty, this.productInCart.getProductPrice(), this.productInCart.getProductPrice()*qty);
+//        System.out.println("-------------------------------------------------------------------------");
 
     }
 }

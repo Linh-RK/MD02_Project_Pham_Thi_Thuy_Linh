@@ -17,7 +17,7 @@ public class UserMenu {
         do {
             System.out.println("----------------------------------USER MENU-----------------------------------");
             System.out.println("|                                                                            |");
-            System.out.println("|        1. Hiển thị danh sách sản phẩm                                      |");
+            System.out.println("|        1. Quản lý danh sách sản phẩm                                      |");
             System.out.println("|        2. Quản lý thông tin cá nhân                                        |");
             System.out.println("|        3. Quản lý giỏ hàng                                                 |");
             System.out.println("|        4. Quản lý đơn hàng                                                 |");

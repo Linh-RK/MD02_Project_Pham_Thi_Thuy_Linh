@@ -2,14 +2,17 @@ package presentation.admin;
 
 import business.entity.Product;
 import business.service.ProductService;
+import business.ultil.enumList.IOFile;
 
+import java.io.Serializable;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.productList;
 import static business.Data.productService;
 
-public class ProductManagement {
+public class ProductManagement implements Serializable {
     public static void productManagement(Scanner sc) {
         boolean flag = true;
         do {
@@ -105,7 +108,7 @@ public class ProductManagement {
     }
 
     private static void sortPriceIncrease() {
-//        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
@@ -118,7 +121,7 @@ public class ProductManagement {
     }
 
     private static void sortPriceDecrease() {
-//        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
@@ -131,8 +134,7 @@ public class ProductManagement {
     }
 
     private static void sortNameIncrease() {
-
-//        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{
@@ -145,7 +147,7 @@ public class ProductManagement {
     }
 
     private static void sortNameDecrease() {
-//        List<Product> productList= IOFile.readObjectFromFile("src/business/data/product.txt");
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         if(productList.isEmpty()){
             System.err.println("Product list is empty");
         }else{

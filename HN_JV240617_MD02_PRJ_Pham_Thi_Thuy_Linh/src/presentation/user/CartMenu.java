@@ -28,27 +28,27 @@ public class CartMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    CartService.showAllCart(currentUser);
+                    CartService.showAllCart();
                     break;
                 }
                 case "2":{
-                    CartService.addToCart(sc,currentUser);
+                    CartService.addToCart(sc);
                     break;
                 }
                 case "3":{
-                    CartService.changeQtyProductInCart(sc,currentUser);
+                    CartService.changeQtyProductInCart(sc);
                     break;
                 }
                 case "4":{
-                    CartService.deleteProductInCart(sc,currentUser);
+                    CartService.deleteProductInCart(sc);
                     break;
                 }
                 case "5":{
-                    CartService.clearCart(sc,currentUser);
+                    CartService.clearCart(sc);
                     break;
                 }
                 case "6":{
-                    addOrderCheckOut(sc);
+                    addOrderCheckOut(sc,currentUser.getCartList());
                     break;
                 }
                 case "7":{

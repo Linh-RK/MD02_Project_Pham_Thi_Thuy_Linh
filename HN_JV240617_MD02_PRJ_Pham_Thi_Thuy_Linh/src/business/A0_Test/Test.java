@@ -1,14 +1,20 @@
 package business.A0_Test;
 
+import business.entity.Order;
+import business.ultil.enumList.IOFile;
+
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String n = inputPhoneNumber(sc);
-        System.out.println(n);
+//        Scanner sc = new Scanner(System.in);
+//        String n = inputPhoneNumber(sc);
+//        System.out.println(n);
 //        System.out.println(currentDate());
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+        orderList.forEach(Order::displayOrder);
     }
     public static int inputNum(Scanner sc){
         System.out.println("Enter number: ");

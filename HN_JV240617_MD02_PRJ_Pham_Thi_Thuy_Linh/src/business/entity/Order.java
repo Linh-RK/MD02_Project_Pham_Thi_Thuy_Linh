@@ -1,7 +1,9 @@
 package business.entity;
 
+import business.ultil.enumList.IOFile;
 import business.ultil.enumList.OrderStatus;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -9,12 +11,12 @@ import static business.Data.*;
 import static business.service.AddressService.showAllAddress;
 import static business.ultil.enumList.Common.*;
 
-public class Order {
+public class Order implements Serializable {
     private int orderId;
     private String orderSerial;
     private int userId;
     private List<Cart> orderCartList;
-    private int orderTotal;
+    private double orderTotal;
     private OrderStatus orderStatus;
     private Address orderReceiveAddress;
     private String orderReceivePhone;
@@ -71,11 +73,11 @@ public class Order {
         this.orderCartList = orderCartList;
     }
 
-    public int getOrderTotal() {
+    public double getOrderTotal() {
         return orderTotal;
     }
 
-    public void setOrderTotal(int orderTotal) {
+    public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
     }
 
@@ -127,20 +129,22 @@ public class Order {
         this.orderUpdatedDate = orderUpdatedDate;
     }
 
-    public void inputOrder(Scanner sc){
+    public void inputOrder(Scanner sc,List<Cart> cartList){
         this.orderId = autoOrderId();
         this.orderSerial = inputOrderSerial(sc);//random
         this.userId = currentUser.getUserId();
         this.orderCartList = inputCartList();//
         this.orderStatus = OrderStatus.WAITING;
-        this.orderTotal = inputOrderTotal(sc);//
+        this.orderTotal = inputOrderTotal(cartList);//
         this.orderCreateDate = currentDate();
         this.orderReceiveAddress = addAddress(sc);
         this.orderUpdatedDate = currentDate();
     }
 
     private Address addAddress(Scanner sc) {
-        showAllAddress(currentUser);
+        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+        currentUser=userList.get(currentIndex);
+        showAllAddress();
         Address newAddress = new Address();
         if(currentUser.getUserAddressList().isEmpty()) {
             System.err.println("Address list is empty. Please add new address");
@@ -180,7 +184,16 @@ public class Order {
 //        userList.set(currentIndex, currentUser);
         return orderProductList;
     }
-
+    //    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
+//    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+//    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+//    List<User> currentUser= IOFile.readObjectFromFile(IOFile.PATH_CURRENTUSER);
+//    List<Cart> cartList= IOFile.readObjectFromFile(IOFile.PATH_CART);
+//    IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
+//    IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
+//    IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
+//    IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
+//    IOFile.writeObjectToFile(cartList, IOFile.PATH_CART);
     public String inputPhone(Scanner sc) {
         System.out.println("Enter Phone Number: ");
         do{
@@ -197,13 +210,13 @@ public class Order {
         }while(true);
     }
     public int autoOrderId() {
-//        List<Order> orderList= IOFile.readObjectFromFile("src/business/data/order.txt");
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
         return orderList.stream().map(Order::getOrderId).max(Comparator.comparingInt(Integer::intValue)).orElse(0)+1;
     }
 
     public String inputOrderSerial(Scanner sc) {
+        List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
         Random r = new Random();
-//        List<Order> orderList= IOFile.readObjectFromFile("src/business/data/order.txt");
 
         do {
             StringBuilder orderSerial = new StringBuilder();
@@ -219,18 +232,25 @@ public class Order {
         return currentUser;
     }
 
-    public int inputOrderTotal(Scanner sc) {
-//        List<Order> orderList= IOFile.readObjectFromFile("src/business/data/order.txt");
-        return orderList.stream().mapToInt(Order::getOrderTotal).sum();
+    public double inputOrderTotal(List<Cart> cartList) {
+        double sum=0;
+        for(Cart cart : cartList) {
+            sum+=cart.getTotal();
+        }
+        return sum;
     }
 
     public void displayOrder() {
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.printf("| %-5d | %-10s | %-7s | %-10d | %-10s |%-13s | \n", this.orderId,this.orderSerial,this.userId,this.orderTotal,this.orderStatus,this.orderCreateDate);
+        double total = 0;
+        for(Cart cart : this.orderCartList) {
+            total += (int) (cart.getQty()*cart.getProductInCart().getProductPrice());
+        }
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-5d | %-10s | %-7s | %-10.0f | %-10s |%-13s | \n", this.orderId,this.orderSerial,this.userId,total,this.orderStatus,this.orderCreateDate);
 
     }
     public  void displayOrderDetails() {
-        int total = 0;
+        double total = 0;
         for(Cart cart : this.orderCartList) {
             total += (int) (cart.getQty()*cart.getProductInCart().getProductPrice());
         }
@@ -245,7 +265,7 @@ public class Order {
         System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n", "ID", "Product", "Qty", "Price", "Total");
         this.orderCartList.forEach(Cart::displayCart);
         System.out.println("------------------------------------------------------------------");
-        System.out.printf("| %-25s | %-34d |\n", "Total: ",total );
+        System.out.printf("| %-25s | %-34.0f |\n", "Total: ",total );
         System.out.println("------------------------------------------------------------------");
         System.out.printf("| %-25s | %-34s |\n", "Receive Address: ", this.orderReceiveAddress.getAddress());
         System.out.println("------------------------------------------------------------------");

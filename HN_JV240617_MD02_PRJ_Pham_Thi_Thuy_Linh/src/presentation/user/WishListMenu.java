@@ -22,15 +22,15 @@ public class WishListMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    WishListService.showAllWishList(sc,currentUser);
+                    WishListService.showAllWishList();
                     break;
                 }
                 case "2":{
-                    WishListService.addNewProductIWishList(sc,currentUser);
+                    WishListService.addNewProductIWishList(sc);
                     break;
                 }
                 case "3":{
-                    WishListService.deleteProductInWisList(sc,currentUser);
+                    WishListService.deleteProductInWisList(sc);
                     break;
                 }
                 case "4":{

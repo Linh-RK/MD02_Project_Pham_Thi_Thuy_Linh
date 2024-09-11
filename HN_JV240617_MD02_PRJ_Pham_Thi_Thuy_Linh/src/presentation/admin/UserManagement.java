@@ -3,11 +3,12 @@ package presentation.admin;
 import business.entity.User;
 import business.service.UserService;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static business.Data.*;
 
-public class UserManagement {
+public class UserManagement implements Serializable {
     public static void userManagement(Scanner sc) {
         boolean flag = true;
         do {
@@ -25,7 +26,7 @@ public class UserManagement {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    UserService.showAllUserInfo(userList);
+                    UserService.showAllUserInfo();
                     break;
                 }
                 case "2":{

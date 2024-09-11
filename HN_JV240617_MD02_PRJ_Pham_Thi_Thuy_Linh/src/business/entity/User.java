@@ -1,7 +1,9 @@
 package business.entity;
 
+import business.ultil.enumList.IOFile;
 import business.ultil.enumList.Role;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +13,7 @@ import java.util.Scanner;
 import static business.Data.*;
 import static business.ultil.enumList.Common.*;
 
-public class User {
+public class User implements Serializable {
     private Role role;                      //1
     private int userId;                     //2
     private String userName;                //3
@@ -30,7 +32,7 @@ public class User {
     }
 
     public User(Role role, int userId, String userName, String userEmail, String userFullName, boolean userStatus,
-                String userPassword, String userPhoneNumber, LocalDate userCreatedDate, LocalDate userUpdatedDate,  List<Cart> cartList, List<Address> addresList) {
+                String userPassword, String userPhoneNumber, LocalDate userCreatedDate, LocalDate userUpdatedDate,  List<Cart> cartList, List<Address> addresList,List<Product> wishList) {
         this.role = role;
         this.userId = userId;
         this.userName = userName;
@@ -43,7 +45,7 @@ public class User {
         this.userUpdatedDate = userUpdatedDate;
         this.cartList = cartList;
         this.userAddressList= addresList;
-
+        this.wishList = wishList;
     }
 
 
@@ -135,14 +137,6 @@ public class User {
         this.userUpdatedDate = userUpdatedDate;
     }
 
-    public List<Order> getHistoryOrder() {
-        return orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList();
-    }
-
-    public void setHistoryOrder(List<Order> historyOrder) {
-        return;
-    }
-
     public List<Cart> getCartList() {
         return cartList;
     }
@@ -175,10 +169,10 @@ public class User {
 //        this.userAddress = inputUserAddress(sc);
         this.userCreatedDate = currentDate();
 //        this.userUpdatedDate = inputUserUpdatedDate(sc);
-//        this.historyOrder = null;
 //        this.cartList = null;
     }
     public void updateUserInfo(Scanner sc) {
+        this.userId = currentUser.getUserId();
         this.userName = inputUserName(sc);
         this.userEmail = inputUserEmail(sc);
         System.out.println("Please enter your full name: ");
@@ -188,18 +182,20 @@ public class User {
         this.userUpdatedDate = currentDate();
     }
 
-    public void updatePassword(Scanner sc) {
+    public static void updatePassword(Scanner sc) {
+        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+        currentUser = userList.get(currentIndex);
         System.out.println("Please enter your old password: ");
         String oldPassword = inputString(sc);
         if(!currentUser.getUserPassword().equals(oldPassword)) {
             System.out.println( "Password doesn't match!" );
 //            quen mat khau
-
         }else{
             System.out.println("Please enter your new password: ");
             String newPassword = inputUserPassword(sc);
             currentUser.setUserPassword(newPassword);
             userList.set(currentIndex,currentUser);
+            IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
             System.out.println("Password updated!");
         }
     }
@@ -211,6 +207,7 @@ public class User {
 //"   Tối thiểu 6 ký tự, tối đa 100 kí tự
 //    Không có ký tự đặc biệt, không trùng lặp"
     private String inputUserName(Scanner sc) {
+        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         System.out.println("Enter user name: ");
         do {
             String userName = sc.nextLine();
@@ -231,6 +228,8 @@ public class User {
     }
 
     private String inputUserEmail(Scanner sc) {
+        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+
         System.out.println("Enter email address: ");
         do{
             String email = sc.nextLine();
@@ -240,12 +239,20 @@ public class User {
                 if(!email.matches("^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$")){
                     System.err.println("Email is incorrect format. Please try again.");
                 } else {
-                    return email;
+                    if(userList.stream().anyMatch(user -> user.getUserEmail().equals(email) )) {
+                        if(currentUser.getUserEmail().equals(email)) {
+                            return email;
+                        }else {
+                            System.err.println("Email is already in use");
+                        }
+                    }else {
+                        return email;
+                    }
                 }
             }
         }while(true);
     }
-    private String inputUserPassword(Scanner sc) {
+    private static String inputUserPassword(Scanner sc) {
         System.out.println("Enter password: ");
         do{
             String password = sc.nextLine();
@@ -264,43 +271,43 @@ public class User {
 
 
     public static void displayDetails(User user) {
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","ID " , user.getUserId());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","Name " , user.getUserName());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","Email " , user.getUserEmail());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","FullName " , user.getUserFullName());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","Status " , user.getUserStatus());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","Password " , user.getUserPassword());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","PhoneNumber " , user.getUserPhoneNumber());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","CreatedDate " , user.getUserCreatedDate());
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("| %-15s :| %-30s | \n","UpdatedDate " , user.getUserUpdatedDate());
-        System.out.println("-------------------------------------------------------");
+        List<Order> historyOrder = orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList();
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","ID " , user.getUserId());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","Name " , user.getUserName());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","Email " , user.getUserEmail());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","FullName " , user.getUserFullName());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","Status " , user.getUserStatus());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","Password " , user.getUserPassword());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","PhoneNumber " , user.getUserPhoneNumber());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","CreatedDate " , user.getUserCreatedDate());
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-15s :| %-50s | \n","UpdatedDate " , user.getUserUpdatedDate());
+        System.out.println("-------------------------------------------------------------------------");
         if(user.getUserAddressList()==null || user.getUserAddressList().isEmpty()){
             System.out.println("Address list is empty");
         }else{
-        System.out.printf("| %-15s :| %-30s |\n","AddressList","");
-            System.out.println("-------------------------------------------------------");
-            System.out.printf("| %-5s | %-10s | %-30s |\n","ID","User ID", "Address");
-            System.out.println("-------------------------------------------------------");
-        user.getUserAddressList().forEach(Address::displayAddress);
+        System.out.printf("| %-15s :| %-50s |\n","AddressList","");
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-15s | %-20s |\n","ID","Receiver","Phone","Address");
+            System.out.println("-------------------------------------------------------------------------");
+            user.getUserAddressList().forEach(Address::displayAddress);
         }
-
-        if(user.getHistoryOrder().isEmpty()||user.getHistoryOrder()==null){
+        if(historyOrder.isEmpty()){
             System.out.println("History order is empty");
         }else{
-            System.out.printf("| %-15s :| %-30s | ","HistoryOrder","");
-            System.out.println("--------------------------------------------------------------------------------------");
-            System.out.printf("| %-5s | %-10s | %-5s | %-15s | %-15s |\n","Product ID", "Product", "Qty", "Price", "Total");
-            user.getHistoryOrder().forEach(Order::displayOrder);
-            System.out.println("--------------------------------------------------------------------------------------");
+            System.out.printf("| %-15s :| %-50s | ","HistoryOrder","");
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-15s | %-7s | %-15s | %-15s |\n","ID", "Product", "Qty", "Price", "Total");
+            historyOrder.forEach(Order::displayOrder);
+            System.out.println("-------------------------------------------------------------------------");
 
         }
 
@@ -308,7 +315,10 @@ public class User {
             System.out.println("Cart is empty");
         }else{
             System.out.println("CartList: ");
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-15s | %-7s | %-15s | %-15s |\n","ID", "Product", "Qty", "Price", "Total");
             user.getCartList().forEach(Cart::displayCart);
+            System.out.println("-------------------------------------------------------------------------");
         }
 
     }

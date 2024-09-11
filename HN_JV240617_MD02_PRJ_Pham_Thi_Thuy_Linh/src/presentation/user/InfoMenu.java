@@ -1,11 +1,13 @@
 package presentation.user;
 
+import business.entity.User;
 import business.service.UserService;
+import business.ultil.enumList.IOFile;
 
+import java.util.List;
 import java.util.Scanner;
 
-import static business.Data.currentUser;
-import static business.Data.user;
+import static business.Data.*;
 import static business.entity.User.displayDetails;
 import static presentation.user.AddressMenu.addressMenu;
 
@@ -26,6 +28,8 @@ public class InfoMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
+                    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+                    currentUser = userList.get(currentIndex);
                     displayDetails(currentUser);
                     break;
                 }
@@ -34,7 +38,7 @@ public class InfoMenu {
                     break;
                 }
                 case "3":{
-                    currentUser.updatePassword(sc);
+                    User.updatePassword(sc);
                     break;
                 }
                 case "4":{
@@ -67,11 +71,19 @@ public class InfoMenu {
                         break;
                     }
                     case "2":{
+                        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+                        currentUser = userList.get(currentIndex);
                         currentUser.updateUserInfo(sc);
+                        userList.set(currentIndex, currentUser);
+                        IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
                         break;
                     }
                     case "3":{
+                        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+                        currentUser = userList.get(currentIndex);
                         currentUser.updatePassword(sc);
+                        userList.set(currentIndex, currentUser);
+                        IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
                         break;
                     }
                     case "4":{
@@ -86,3 +98,14 @@ public class InfoMenu {
             }while (flag);
     }
 }
+//            List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
+//    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
+//    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+//    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+//    List<User> currentUser= IOFile.readObjectFromFile(IOFile.PATH_CURRENTUSER);
+//    List<Cart> cartList= IOFile.readObjectFromFile(IOFile.PATH_CART);
+//            IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
+//            IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
+//            IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
+//            IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
+//    IOFile.writeObjectToFile(cartList, IOFile.PATH_CART);

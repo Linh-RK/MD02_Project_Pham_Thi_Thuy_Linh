@@ -2,13 +2,16 @@ package presentation.admin;
 
 import business.entity.Order;
 import business.service.OrderService;
+import business.ultil.enumList.IOFile;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.orderList;
 
-public class OrderManagement {
-    public static void orderManagement(Scanner sc) {
+public class OrderManagement implements Serializable {
+    public static void orderManagement (Scanner sc){
         boolean flag = true;
         do {
             System.out.println("---------------------------------ADMIN ORDER----------------------------------");
@@ -25,23 +28,27 @@ public class OrderManagement {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    OrderService.showAllOrder( orderList);
+                    List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+                    OrderService.showAllOrder(orderList);
                     break;
                 }
                 case "2":{
+                    List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     OrderService.findOrderById(sc,orderList);
                     break;
                 }
                 case "3":{
+                    List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     OrderService.findByOrderStatus(sc,orderList);
                     break;
                 }
                 case "4":{
-                    OrderService.orderDetailById(sc,orderList);
+//                    List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+                    OrderService.orderDetailById(sc);
                     break;
                 }
                 case "5":{
-                    OrderService.changeOrderStatus(sc,orderList);
+                    OrderService.changeOrderStatus(sc);
                     break;
                 }
                 case "6":{

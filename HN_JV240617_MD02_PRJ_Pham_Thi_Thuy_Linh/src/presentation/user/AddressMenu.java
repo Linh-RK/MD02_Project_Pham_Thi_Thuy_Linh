@@ -1,12 +1,18 @@
 package presentation.user;
 
+import business.entity.User;
 import business.service.AddressService;
+import business.ultil.enumList.IOFile;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Scanner;
 
+import static business.Data.currentIndex;
 import static business.Data.currentUser;
 
-public class AddressMenu {
+public class AddressMenu implements Serializable {
+
     public static void addressMenu(Scanner sc) {
         boolean flag = true;
         do {
@@ -23,19 +29,20 @@ public class AddressMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    AddressService.searchAddressById(sc,currentUser);
+
+                    AddressService.searchAddressById(sc);
                     break;
                 }
                 case "2":{
-                    AddressService.showAllAddress(currentUser);
+                    AddressService.showAllAddress();
                     break;
                 }
                 case "3":{
-                    AddressService.deleteAddressById(sc,currentUser);
+                    AddressService.deleteAddressById(sc);
                     break;
                 }
                 case "4":{
-                    AddressService.addNewAddress(sc,currentUser);
+                    AddressService.addNewAddress(sc);
                     break;
                 }
                 case "5":{
