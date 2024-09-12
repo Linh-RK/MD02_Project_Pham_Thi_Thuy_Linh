@@ -3,8 +3,6 @@ package presentation.user;
 import java.util.Scanner;
 
 import static business.Data.currentUser;
-import static business.Data.productList;
-import static business.service.ProductService.showAllProduct;
 import static presentation.user.CartMenu.cartMenu;
 import static presentation.user.InfoMenu.infoMenu;
 import static presentation.user.OrderMenu.orderMenu;
@@ -17,7 +15,7 @@ public class UserMenu {
         do {
             System.out.println("----------------------------------USER MENU-----------------------------------");
             System.out.println("|                                                                            |");
-            System.out.println("|        1. Quản lý danh sách sản phẩm                                      |");
+            System.out.println("|        1. Thông tin sản phẩm                                               |");
             System.out.println("|        2. Quản lý thông tin cá nhân                                        |");
             System.out.println("|        3. Quản lý giỏ hàng                                                 |");
             System.out.println("|        4. Quản lý đơn hàng                                                 |");

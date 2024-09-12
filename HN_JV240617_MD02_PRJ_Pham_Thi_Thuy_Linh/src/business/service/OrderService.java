@@ -1,25 +1,23 @@
 package business.service;
 
+import business.design.iGeneric.IGenericOrder;
 import business.entity.*;
 import business.ultil.enumList.IOFile;
 import business.ultil.enumList.OrderStatus;
-import business.ultil.enumList.Role;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.*;
-import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 import static presentation.admin.OrderManagement.orderManagement;
 import static presentation.user.CartMenu.cartMenu;
 
-public class OrderService implements Serializable {
-
-    public static void addOrderCheckOut(Scanner sc,List<Cart> cartList) {
+public class OrderService implements IGenericOrder, Serializable {
+    @Override
+    public void addOrderCheckOut(Scanner sc, List<Cart> cartList) {
         List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
@@ -67,17 +65,21 @@ public class OrderService implements Serializable {
             }
         }
     }
-    public static void showAllOrder(List<Order> orderList){
+
+    @Override
+    public void showAllOrder(List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
-        orderList.forEach(Order::displayOrder);
-        System.out.println("--------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
+            orderList.forEach(Order::displayOrder);
+            System.out.println("--------------------------------------------------------------------------");
         }
     }
-    public static void findOrderById(Scanner sc,List<Order> orderList){
+
+    @Override
+    public void findOrderById(Scanner sc, List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -94,7 +96,9 @@ public class OrderService implements Serializable {
             }
         }
     }
-    public static void findByOrderStatus(Scanner sc,List<Order> orderList){
+
+    @Override
+    public void findByOrderStatus(Scanner sc, List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -112,15 +116,17 @@ public class OrderService implements Serializable {
                 System.out.printf("| %-5s | %-10s | %-5s | %-10s | %-10s | %-10s | \n","ID", "Serial","User ID","Total","Status","Created Date");
                 orderList.stream().filter(e -> e.getOrderStatus().name().equalsIgnoreCase(status)).forEach(Order::displayOrder);
                 System.out.println("--------------------------------------------------------------------------");
-                }
+            }
         }
     }
 
-    private static boolean isExistInEnum(String status,List<Order> orderList) {
+    @Override
+    public boolean isExistInEnum(String status, List<Order> orderList) {
         return orderList.stream().map(Order::getOrderStatus).toList().stream().anyMatch(e->e.name().equalsIgnoreCase(status));
     }
 
-    public static void orderDetailById(Scanner sc){
+    @Override
+    public void orderDetailById(Scanner sc) {
         List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
 
         if(orderList == null || orderList.isEmpty()){
@@ -135,9 +141,12 @@ public class OrderService implements Serializable {
                 orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrderDetails);
             }
         }
-    };
-    public static void cancelOrder(Scanner sc, List<Order> order){
+    }
+
+    @Override
+    public void cancelOrder(Scanner sc, List<Order> order) {
         List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
+        List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         if(order == null || order.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -155,6 +164,17 @@ public class OrderService implements Serializable {
                     if (answer.equalsIgnoreCase("y")) {
                         orderFind.setOrderStatus(OrderStatus.CANCEL);
                         orderList.set(indexOrder, orderFind);
+//                        update lai gio hang
+                        List<Cart> cancelCart = orderFind.getOrderCartList();
+                        Product p;
+                        int idProduct;
+                        for (Cart cart : cancelCart) {
+                            p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
+                            p.setProductStock(p.getProductStock() + cart.getQty());
+                            idProduct = productList.indexOf(p);
+                            productList.set(idProduct, p);
+                            IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
+                        }
                         IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
                     } else if (answer.equalsIgnoreCase("n")) {
                         orderManagement(sc);
@@ -163,7 +183,9 @@ public class OrderService implements Serializable {
             }
         }
     }
-    public static void changeOrderStatus(Scanner sc){
+
+    @Override
+    public void changeOrderStatus(Scanner sc) {
         List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
@@ -203,14 +225,14 @@ public class OrderService implements Serializable {
 
                             for (Cart cart : cancelCart) {
                                 List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
-                                 p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
+                                p = productList.stream().filter(e -> e.getProductId() == cart.getProductInCart().getProductId()).findFirst().get();
                                 p.setProductStock(p.getProductStock() + cart.getQty());
                                 idProduct = productList.indexOf(p);
                                 productList.set(idProduct, p);
                                 IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
                             }
                             System.out.println("Cancel order successfully");
-                            showAllProduct();
+                            productService.showAllProduct(sc);
                             break;
                         }
                         case "3": {
@@ -276,7 +298,7 @@ public class OrderService implements Serializable {
                                 IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
                             }
                             System.out.println("Order be delivery failed");
-                            showAllProduct();
+                            productService.showAllProduct(sc);
                             break;
                         }
                         case "3": {
@@ -291,7 +313,9 @@ public class OrderService implements Serializable {
             }
         }
     }
-    public static void filterByDate(Scanner sc, List<Order> orderList){
+
+    @Override
+    public void filterByDate(Scanner sc, List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -315,7 +339,8 @@ public class OrderService implements Serializable {
         }
     }
 
-    public static void showDetailById(Scanner sc,List<Order> orderList) {
+    @Override
+    public void showDetailById(Scanner sc, List<Order> orderList) {
         if(orderList == null || orderList.isEmpty()){
             System.err.println("Order list is empty");
         }else {
@@ -327,9 +352,7 @@ public class OrderService implements Serializable {
             }else {
                 System.out.println("Result");
                 orderList.stream().filter(e -> e.getOrderId() == id).forEach(Order::displayOrderDetails);
-                }
+            }
         }
     }
-
-
 }

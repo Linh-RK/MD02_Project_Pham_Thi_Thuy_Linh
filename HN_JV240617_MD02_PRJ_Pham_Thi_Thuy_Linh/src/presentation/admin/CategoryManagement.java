@@ -26,27 +26,27 @@ public class CategoryManagement {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    CategoryService.showAllCategory();
+                    categoryService.showAllCategory();
                     break;
                 }
                 case "2":{
-                    CategoryService.addCategory(sc);
+                    categoryService.addCategory(sc);
                     break;
                 }
                 case "3":{
-                    CategoryService.updateCategory(sc);
+                    categoryService.updateCategory(sc);
                     break;
                 }
                 case "4":{
-                    CategoryService.deleteCategory(sc);
+                    categoryService.deleteCategory(sc);
                     break;
                 }
                 case "5":{
-                    CategoryService.searchCate(sc);
+                    categoryService.searchCate(sc);
                     break;
                 }
                 case "6":{
-                    CategoryService.sortCate(sc);
+                    categoryService.sortCate(sc);
                     break;
                 }
                 case "7":{

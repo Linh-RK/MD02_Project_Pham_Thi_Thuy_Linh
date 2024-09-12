@@ -79,18 +79,4 @@ public class AddressService implements Serializable {
         System.out.println("Add address successfully");
         showAllAddress();
     }
-//    public static void (Scanner sc){}
 }
-
-//    List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
-//    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
-//    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-//    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
-//    User currentUser= IOFile.readObjectFromFile(IOFile.PATH_USERCURRENT);
-//    List<Cart> cartList= IOFile.readObjectFromFile(IOFile.PATH_CART);
-//    IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
-//    IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
-//    IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
-//    IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
-//    IOFile.writeObjectToFile(userList, IOFile.PATH_USERCURRENT);
-//    IOFile.writeObjectToFile(cartList, IOFile.PATH_CART);

@@ -5,7 +5,7 @@ import presentation.admin.ProductManagement;
 
 import java.util.Scanner;
 
-import static business.service.ProductService.showAllProduct;
+import static business.Data.productService;
 
 public class ProductMenu {
     public static void productMenu(Scanner sc) {
@@ -13,7 +13,7 @@ public class ProductMenu {
         do {
             System.out.println("--------------------------------PRODUCT MENU----------------------------------");
             System.out.println("|                                                                            |");
-            System.out.println("|        1. Hiển thị sản phẩm (phân trang)                                   |");
+            System.out.println("|        1. Hiển thị sản phẩm                                                |");
             System.out.println("|        2. Tìm kiếm sản phẩm                                                |");
             System.out.println("|        3. Sắp xếp                                                          |");
             System.out.println("|        4. Quay lại                                                         |");
@@ -23,11 +23,11 @@ public class ProductMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    ProductService.showAllProduct();
+                    productService.showAllProduct(sc);
                     break;
                 }
                 case "2":{
-                    ProductService.searchProduct(sc);
+                    productService.searchProduct(sc);
                     break;
                 }
                 case "3":{

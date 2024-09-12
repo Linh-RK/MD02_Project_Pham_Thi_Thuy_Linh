@@ -31,7 +31,7 @@ public class ProductManagement implements Serializable {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1": {
-                    ProductService.showAllProduct();
+                    productService.showAllProduct(sc);
                     break;
                 }
                 case "2": {

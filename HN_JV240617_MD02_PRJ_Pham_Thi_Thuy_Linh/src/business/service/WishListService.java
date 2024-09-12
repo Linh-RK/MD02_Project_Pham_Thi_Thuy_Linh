@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.*;
-import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.inputNum;
 
 public class WishListService implements Serializable {
@@ -29,7 +28,7 @@ public class WishListService implements Serializable {
         List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         currentUser =  userList.get(currentIndex);
-        showAllProduct();
+        productService.showAllProduct(sc);
         System.out.println("Enter product ID you want to add: ");
         int id = inputNum(sc);
         if(productList.stream().noneMatch(e->e.getProductId()==id)){
@@ -53,7 +52,6 @@ public class WishListService implements Serializable {
     }
     public static void deleteProductInWisList(Scanner sc){
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
-
         currentUser =  userList.get(currentIndex);
         System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("| %-5s | %-20s | %-15s | %-10s | %-10s |  %-10s | %-10s |  %-12s | %-10s | %-10s |\n ", "ID", "Product","Category","Price","Stock","Color","Size","Created Date","Updated Date","Wish List");

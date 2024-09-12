@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static business.Data.orderList;
+import static business.Data.orderService;
 
 public class OrderManagement implements Serializable {
     public static void orderManagement (Scanner sc){
@@ -29,26 +30,26 @@ public class OrderManagement implements Serializable {
             switch (choice) {
                 case "1":{
                     List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-                    OrderService.showAllOrder(orderList);
+                    orderService.showAllOrder(orderList);
                     break;
                 }
                 case "2":{
                     List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-                    OrderService.findOrderById(sc,orderList);
+                    orderService.findOrderById(sc,orderList);
                     break;
                 }
                 case "3":{
                     List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-                    OrderService.findByOrderStatus(sc,orderList);
+                    orderService.findByOrderStatus(sc,orderList);
                     break;
                 }
                 case "4":{
 //                    List<Order> orderList = IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-                    OrderService.orderDetailById(sc);
+                    orderService.orderDetailById(sc);
                     break;
                 }
                 case "5":{
-                    OrderService.changeOrderStatus(sc);
+                    orderService.changeOrderStatus(sc);
                     break;
                 }
                 case "6":{

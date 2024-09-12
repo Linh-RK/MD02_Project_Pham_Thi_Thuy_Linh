@@ -1,5 +1,7 @@
 package business.service;
 
+import business.design.iGeneric.IGenericCategory;
+import business.entity.Cart;
 import business.entity.Category;
 import business.ultil.enumList.IOFile;
 
@@ -14,8 +16,9 @@ import static business.Data.productList;
 import static business.ultil.enumList.Common.inputNum;
 import static business.ultil.enumList.Common.inputString;
 
-public class CategoryService implements Serializable {
-    public static void addCategory(Scanner sc) {
+public class CategoryService implements IGenericCategory, Serializable{
+    @Override
+    public void addCategory(Scanner sc) {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         System.out.println("Enter the number of categories you want to add");
         int number = inputNum(sc);
@@ -29,7 +32,9 @@ public class CategoryService implements Serializable {
         System.out.println("Added Category successfully");
         showAllCategory();
     }
-    public static void showAllCategory() {
+
+    @Override
+    public void showAllCategory() {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         if(categoryList.isEmpty()){
             System.err.println("Category list is empty");
@@ -40,7 +45,9 @@ public class CategoryService implements Serializable {
             System.out.println("------------------------------------------------------------------------------");
         }
     }
-    public  static void updateCategory(Scanner sc) {
+
+    @Override
+    public void updateCategory(Scanner sc) {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         System.out.println("Enter the category ID you want to update");
         int id = inputNum(sc);
@@ -54,7 +61,9 @@ public class CategoryService implements Serializable {
             showAllCategory();
         }
     }
-    public static void deleteCategory(Scanner sc) {
+
+    @Override
+    public void deleteCategory(Scanner sc) {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         System.out.println("Enter the category ID you want to delete");
         int id = inputNum(sc);
@@ -64,14 +73,16 @@ public class CategoryService implements Serializable {
             if (productList.stream().anyMatch(e -> e.getProductCate().getCateId() == id)) {
                 System.err.println("Category have product inside, cannot delete");
             } else {
-            categoryList.remove(categoryList.stream().filter(e -> e.getCateId() == id).findFirst().get());
-            IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
-            System.out.println("Update Category successfully");
-            showAllCategory();
+                categoryList.remove(categoryList.stream().filter(e -> e.getCateId() == id).findFirst().get());
+                IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
+                System.out.println("Update Category successfully");
+                showAllCategory();
             }
         }
     }
-    public static void searchCate(Scanner sc) {
+
+    @Override
+    public void searchCate(Scanner sc) {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         System.out.println("Please enter search keys:");
             String key = inputString(sc);
@@ -85,7 +96,9 @@ public class CategoryService implements Serializable {
                 System.out.println("------------------------------------------------------------------------------");
             }
     }
-    public static void sortCate(Scanner sc) {
+
+    @Override
+    public void sortCate(Scanner sc) {
         List<Category> categoryList= IOFile.readObjectFromFile( IOFile.PATH_CATEGORY);
         System.out.println("Result sort by name increasing order:");
         System.out.println("------------------------------------------------------------------------------");

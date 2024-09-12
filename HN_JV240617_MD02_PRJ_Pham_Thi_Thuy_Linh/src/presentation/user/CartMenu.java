@@ -5,9 +5,7 @@ import business.service.OrderService;
 
 import java.util.Scanner;
 
-import static business.Data.currentUser;
-import static business.Data.order;
-import static business.service.OrderService.addOrderCheckOut;
+import static business.Data.*;
 
 public class CartMenu {
     public static void cartMenu(Scanner sc) {
@@ -28,27 +26,27 @@ public class CartMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    CartService.showAllCart();
+                    cartService.showAllCart();
                     break;
                 }
                 case "2":{
-                    CartService.addToCart(sc);
+                    cartService.addToCart(sc);
                     break;
                 }
                 case "3":{
-                    CartService.changeQtyProductInCart(sc);
+                    cartService.changeQtyProductInCart(sc);
                     break;
                 }
                 case "4":{
-                    CartService.deleteProductInCart(sc);
+                    cartService.deleteProductInCart(sc);
                     break;
                 }
                 case "5":{
-                    CartService.clearCart(sc);
+                    cartService.clearCart(sc);
                     break;
                 }
                 case "6":{
-                    addOrderCheckOut(sc,currentUser.getCartList());
+                    orderService.addOrderCheckOut(sc,currentUser.getCartList());
                     break;
                 }
                 case "7":{

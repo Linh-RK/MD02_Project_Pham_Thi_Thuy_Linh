@@ -19,26 +19,27 @@ public class UserManagement implements Serializable {
             System.out.println("|        3. Xóa người dùng                                                   |");
             System.out.println("|        4. Tìm kiếm người dùng                                              |");
             System.out.println("|        5. Sắp xếp theo tên theo chiều giảm dần hoặc tăng dần               |");
-            System.out.println("|        6. Quay lại                                                         |");
+            System.out.println("|        6. Danh sách quyền của người dùng                                   |");
+            System.out.println("|        7. Quay lại                                                         |");
             System.out.println("|                                                                            |");
             System.out.println("------------------------------------------------------------------------------");
             System.out.println("Please enter your choice");
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    UserService.showAllUserInfo();
+                    userService.showAllUserInfo();
                     break;
                 }
                 case "2":{
-                    UserService.changeUserStatus(sc);
+                    userService.changeUserStatus(sc);
                     break;
                 }
                 case "3":{
-                    UserService.deleteUser(sc);
+                    userService.deleteUser(sc);
                     break;
                 }
                 case "4":{
-                    UserService.searchUser(sc);
+                    userService.searchUser(sc);
                     break;
                 }
                 case "5":{
@@ -46,6 +47,10 @@ public class UserManagement implements Serializable {
                     break;
                 }
                 case "6":{
+                    userService.listRole(sc);
+                    break;
+                }
+                case "7":{
                     flag = false;
                     break;
                 }
@@ -71,11 +76,11 @@ public class UserManagement implements Serializable {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":{
-                    UserService.sortUserByNameIncrease();
+                    userService.sortUserByNameIncrease();
                     break;
                 }
                 case "2":{
-                    UserService.sortUserByNameDecrease();
+                    userService.sortUserByNameDecrease();
                     break;
                 }
                 case "3":{

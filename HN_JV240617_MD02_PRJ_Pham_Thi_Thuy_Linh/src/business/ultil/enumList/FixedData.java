@@ -12,21 +12,21 @@ import static business.Data.userList;
 public class FixedData {
     public static void main(String[] args) {
 
-            Category cate1 = new Category(1, "cate1", true, "description1");
-            Category cate2 = new Category(2, "cate2", true, "description2");
-            Category cate3 = new Category(3, "cate3", true, "description2");
-            Category cate4 = new Category(4, "cate4", true, "description4");
+            Category cate1 = new Category(1, "Skincare", true, "Sản phẩm dưỡng da");
+            Category cate2 = new Category(2, "Cleansing", true, "Sản phẩm làm sạch");
+            Category cate3 = new Category(3, "Makeup", true, "Sản phẩm trang điểm");
+            Category cate4 = new Category(4, "Cosmetic", true, "Dụng cụ trang điểm");
             categoryList.add(cate1);
             categoryList.add(cate2);
             categoryList.add(cate3);
             categoryList.add(cate4);
 
-            Product p1 = new Product(1, "p1", cate1, 30, 10, "description p", "pink", LocalDate.of(2023, 5, 1), "M", null, false);
-            Product p2 = new Product(2, "p2", cate1, 80, 10, "description p", "red", LocalDate.of(2023, 5, 1), "S", null, false);
-            Product p3 = new Product(3, "p3", cate2, 50, 10, "description p", "pink", LocalDate.of(2023, 5, 1), "M", null, false);
-            Product p4 = new Product(4, "p4", cate3, 40, 10, "description p", "blue", LocalDate.of(2023, 5, 1), "XL", null, true);
-            Product p5 = new Product(5, "p5", cate4, 70, 10, "description p", "pink", LocalDate.of(2023, 5, 1), "L", null, false);
-            Product p6 = new Product(6, "p6", cate4, 90, 10, "description p", "black", LocalDate.of(2023, 5, 1), "M", null, true);
+            Product p1 = new Product(1, "Serum", cate1, 30, 10, "Serum dưỡng da", "pink", LocalDate.of(2023, 5, 1), "M", LocalDate.of(2023, 10, 1), false);
+            Product p2 = new Product(2, "Cream", cate1, 80, 10, "Kem dưỡng da", "white", LocalDate.of(2023, 5, 1), "S", LocalDate.of(2023, 10, 1), false);
+            Product p3 = new Product(3, "SRM", cate2, 50, 10, "Sữa rửa mặt", "pink", LocalDate.of(2023, 5, 1), "M", LocalDate.of(2023, 10, 1), false);
+            Product p4 = new Product(4, "Cushion", cate3, 40, 10, "Cushion", "beige", LocalDate.of(2023, 5, 1), "XL", LocalDate.of(2023, 10, 1), true);
+            Product p5 = new Product(5, "Pad", cate4, 70, 10, "Pad trang điểm", "pink", LocalDate.of(2023, 5, 1), "L", LocalDate.of(2023, 10, 1), false);
+            Product p6 = new Product(6, "Brush", cate4, 90, 10, "Cọ trang điểm", "black", LocalDate.of(2023, 5, 1), "M", LocalDate.of(2023, 10, 1), true);
             productList.add(p1);
             productList.add(p2);
             productList.add(p3);
@@ -80,19 +80,19 @@ public class FixedData {
             List<Product> wl5= new ArrayList<>();
 
 
-            User admin = new User(Role.ADMIN, 6, "admin", "admin@gmail.com", "Nguyen Van Admin", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), null, null,null);
-            User user1 = new User(Role.USER, 1, "user1", "user1@gmail.com", "Nguyen Van 1", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), cartList1, addressList1,wl1);
-            User user2 = new User(Role.USER, 2, "user2", "user2@gmail.com", "Nguyen Van 2", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), cartList2, addressList2,wl2);
-            User user3 = new User(Role.USER, 3, "user3", "user3@gmail.com", "Nguyen Van 3", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), cartList3, addressList3,wl3);
-            User user4 = new User(Role.USER, 4, "user4", "user4@gmail.com", "Nguyen Van 4", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), cartList4, addressList4,wl4);
-            User user5 = new User(Role.USER, 5, "user5", "user5@gmail.com", "Nguyen Van 5", true, "123abc", "0987654321", null, LocalDate.of(2023, 5, 1), cartList5, addressList5,wl5);
+            User admin = new User(Role.ADMIN, 6, "admin", "admin@gmail.com", "Nguyen Van Admin", true, "123abc", "0987654321", LocalDate.of(2023, 5, 1), LocalDate.of(2023, 10, 1), null, null,null);
+            User user1 = new User(Role.USER, 1, "linhlinh", "user1@gmail.com", "Nguyen Van 1", true, "123abc", "0987654321", LocalDate.of(2023, 7, 1), LocalDate.of(2023, 10, 1), cartList1, addressList1,wl1);
+            User user2 = new User(Role.USER, 2, "huonghuong", "user2@gmail.com", "Nguyen Van 2", true, "123abc", "0987654321", LocalDate.of(2023, 6, 1), LocalDate.of(2023, 10, 1), cartList2, addressList2,wl2);
+            User user3 = new User(Role.USER, 3, "duongduong", "user3@gmail.com", "Nguyen Van 3", true, "123abc", "0987654321", LocalDate.of(2023, 9, 1), LocalDate.of(2023, 10, 1), cartList3, addressList3,wl3);
+            User user4 = new User(Role.USER, 4, "hunghung", "user4@gmail.com", "Nguyen Van 4", true, "123abc", "0987654321", LocalDate.of(2023, 11, 1), LocalDate.of(2023, 12, 1), cartList4, addressList4,wl4);
+            User user5 = new User(Role.USER, 5, "ngocngoc", "user5@gmail.com", "Nguyen Van 5", true, "123abc", "0987654321", LocalDate.of(2023, 2, 1), LocalDate.of(2023, 9, 1), cartList5, addressList5,wl5);
             userList.add(admin);
             userList.add(user1);
             userList.add(user2);
             userList.add(user3);
             userList.add(user4);
             userList.add(user5);
-//            List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
+//    List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
 //    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
 //    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
 //    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);

@@ -1,5 +1,6 @@
 package business.entity;
 
+
 import business.service.ProductService;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 import static business.Data.*;
 import static business.ultil.enumList.Common.inputNum;
 
-public class Cart implements Serializable {
+public class Cart  implements Serializable {
     private int userId;
     private Product productInCart;
     private int qty;
@@ -60,7 +61,7 @@ public class Cart implements Serializable {
     }
 
     private Product inputProductInCart(Scanner sc) {
-        ProductService.showAllProduct();
+        productService.showAllProduct(sc);
 //        showAllProduct();
         System.out.println("Enter product id from list before: ");
         do {

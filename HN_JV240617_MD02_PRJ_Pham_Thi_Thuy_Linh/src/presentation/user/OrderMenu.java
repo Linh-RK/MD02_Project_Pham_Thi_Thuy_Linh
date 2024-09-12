@@ -46,7 +46,7 @@ public class OrderMenu {
                     List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
                     currentUser = userList.get(currentIndex);
-                    OrderService.showAllOrder(orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
+                    orderService.showAllOrder(orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
                     break;
                 }
                 case "2":{
@@ -59,7 +59,7 @@ public class OrderMenu {
                     if(o.isEmpty()){
                         System.out.println("cart blank");
                     }else {
-                        OrderService.showDetailById(sc, o);
+                        orderService.showDetailById(sc, o);
                         break;
                     }
                 }
@@ -67,28 +67,28 @@ public class OrderMenu {
                     List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
                     currentUser = userList.get(currentIndex);
-                    OrderService.cancelOrder(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
+                    orderService.cancelOrder(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
                     break;
                 }
                 case "4":{
                     List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
                     currentUser = userList.get(currentIndex);
-                    OrderService.filterByDate(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
+                    orderService.filterByDate(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
                     break;
                 }
                 case "5":{
                     List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
                     currentUser = userList.get(currentIndex);
-                    OrderService.findByOrderStatus(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
+                    orderService.findByOrderStatus(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
                     break;
                 }
                 case "6":{
                     List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
                     List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
                     currentUser = userList.get(currentIndex);
-                    OrderService.findOrderById(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
+                    orderService.findOrderById(sc,orderList.stream().filter(e->e.getUserId()==currentUser.getUserId()).toList());
                     break;
                 }
                 case "7":{

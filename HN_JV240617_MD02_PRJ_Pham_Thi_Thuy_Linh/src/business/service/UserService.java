@@ -1,7 +1,9 @@
 package business.service;
 
+import business.design.iGeneric.IGenericUser;
 import business.entity.User;
 import business.ultil.enumList.IOFile;
+import business.ultil.enumList.Role;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -11,20 +13,10 @@ import java.util.Scanner;
 import static business.Data.*;
 import static business.ultil.enumList.Common.inputNum;
 
-public class UserService implements Serializable {
-//    List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
-//    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
-//    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-//    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
-//    List<User> currentUser= IOFile.readObjectFromFile(IOFile.PATH_CURRENTUSER);
-//    List<Cart> cartList= IOFile.readObjectFromFile(IOFile.PATH_CART);
-//    IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
-//    IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
-//    IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
-//    IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
-//    IOFile.writeObjectToFile(cartList, IOFile.PATH_CART);
-    public static void showAllUserInfo(){
-        List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
+public class UserService implements IGenericUser, Serializable {
+    @Override
+    public void showAllUserInfo() {
+            List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         if(userList.isEmpty()){
             System.err.println("User list is empty");
         }else {
@@ -34,7 +26,9 @@ public class UserService implements Serializable {
             System.out.println("------------------------------------------------------------------------------------------------------------------");
         }
     }
-    public static void changeUserStatus(Scanner sc){
+
+    @Override
+    public void changeUserStatus(Scanner sc) {
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         System.out.println("Please enter ID user you want to change status");
             int id = inputNum(sc);
@@ -47,7 +41,8 @@ public class UserService implements Serializable {
           showAllUserInfo();
     }
 
-    public static void deleteUser(Scanner sc){
+    @Override
+    public void deleteUser(Scanner sc) {
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         System.out.println("Please enter ID user you want to delete");
             int id = inputNum(sc);
@@ -60,7 +55,9 @@ public class UserService implements Serializable {
             }
             showAllUserInfo();
     }
-    public static void searchUser(Scanner sc){
+
+    @Override
+    public void searchUser(Scanner sc) {
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         System.out.println("Please enter ID user you want to search:");
             int id = inputNum(sc);
@@ -74,7 +71,9 @@ public class UserService implements Serializable {
                 System.out.println("------------------------------------------------------------------------------------------------------------------");
             }
     }
-    public static void sortUserByNameIncrease(){
+
+    @Override
+    public void sortUserByNameIncrease() {
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
     if(userList.isEmpty()){
         System.err.println("User list is empty");
@@ -86,7 +85,9 @@ public class UserService implements Serializable {
 
     }
     }
-    public static void sortUserByNameDecrease(){
+
+    @Override
+    public void sortUserByNameDecrease() {
         List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
         if(userList.isEmpty()){
             System.err.println("User list is empty");
@@ -99,4 +100,11 @@ public class UserService implements Serializable {
         }
     }
 
+    @Override
+    public void listRole(Scanner sc) {
+        Role[] roles = Role.values();
+        for (Role role : roles) {
+            System.out.println(role);
+        }
+    }
 }

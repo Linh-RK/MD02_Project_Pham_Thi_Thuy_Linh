@@ -5,6 +5,7 @@ import business.service.ProductService;
 import business.ultil.enumList.Common;
 import business.ultil.enumList.IOFile;
 import business.ultil.enumList.Role;
+import presentation.admin.ProductManagement;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Main_Menu {
             System.out.println("|                                                                            |");
             System.out.println("|        1. Đăng nhập                                                        |");
             System.out.println("|        2. Đăng ký                                                          |");
-            System.out.println("|        3. Hiển thị sản phẩm được bán                                       |");
+            System.out.println("|        3. Thông tin sản phẩm                                               |");
             System.out.println("|        4. Quên mật khẩu                                                    |");
             System.out.println("|        5. Thoát                                                            |");
             System.out.println("|                                                                            |");
@@ -42,7 +43,7 @@ public class Main_Menu {
                     break;
                 }
                 case "3":{
-                    ProductService.showAllProduct();
+                    commonProductMenu(sc);
                     break;
                 }
                 case "4":{
@@ -61,22 +62,60 @@ public class Main_Menu {
         }while (true);
     }
 
+    public static void commonProductMenu(Scanner sc) {
+        boolean flag = true;
+        do {
+            System.out.println("--------------------------------PRODUCT MENU----------------------------------");
+            System.out.println("|                                                                            |");
+            System.out.println("|        1. Chi tiết thông tin sản phẩm theo id                              |");
+            System.out.println("|        2. Danh sách sản phẩm theo danh mục                                 |");
+            System.out.println("|        3. Danh sách sản phẩm mới                                           |");
+            System.out.println("|        4. Danh sách sản phẩm được bán                                      |");
+            System.out.println("|        5. Tìm kiếm sản phẩm theo tên hoặc mô tả                            |");
+            System.out.println("|        6. Quay lại                                                         |");
+            System.out.println("|                                                                            |");
+            System.out.println("------------------------------------------------------------------------------");
+            System.out.println("Please enter your choice");
+            String choice = sc.nextLine();
+            switch (choice) {
+                case "1":{
+                    productService.searchProductById(sc);
+                    break;
+                }
+                case "2":{
+                    productService.filterProductByCate(sc);
+                    break;
+                }
+                case "3":{
+                    productService.top5NewProduct(sc);
+                    break;
+                }
+                case "4":{
+                    productService.onSaleProduct(sc);
+                    break;
+                }
+                case "5":{
+                    productService.searchProduct(sc);
+                    break;
+                }
+                case "6":{
+                    flag=false;
+                    break;
+                }
+                default:{
+                    System.err.println("Please enter a choice from the menu");
+                    break;
+                }
+            }
+        }while (flag);
+    }
+
+
     private static LocalDate currentdate() {
         LocalDate today = LocalDate.now( );
         System.out.println(today);
         return today;
     }
-    //    List<Category> categoryList= IOFile.readObjectFromFile(IOFile.PATH_CATEGORY);
-//    List<Product> productList= IOFile.readObjectFromFile(IOFile.PATH_PRODUCT);
-//    List<Order> orderList= IOFile.readObjectFromFile(IOFile.PATH_ORDER);
-//    List<User> userList= IOFile.readObjectFromFile(IOFile.PATH_USER);
-//    List<User> currentUser= IOFile.readObjectFromFile(IOFile.PATH_CURRENTUSER);
-//    List<Cart> cartList= IOFile.readObjectFromFile(IOFile.PATH_CART);
-//    IOFile.writeObjectToFile(categoryList, IOFile.PATH_CATEGORY);
-//    IOFile.writeObjectToFile(productList, IOFile.PATH_PRODUCT);
-//    IOFile.writeObjectToFile(orderList, IOFile.PATH_ORDER);
-//    IOFile.writeObjectToFile(userList, IOFile.PATH_USER);
-//    IOFile.writeObjectToFile(cartList, IOFile.PATH_CART);
     private static void logIn(Scanner sc) {
 
         System.out.println("Please enter your email");

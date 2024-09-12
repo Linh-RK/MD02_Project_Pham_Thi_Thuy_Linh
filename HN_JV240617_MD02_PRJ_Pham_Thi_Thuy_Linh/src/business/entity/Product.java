@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 import static business.Data.*;
-import static business.service.ProductService.showAllProduct;
 import static business.ultil.enumList.Common.*;
 
 public class Product implements Serializable {
@@ -218,7 +217,7 @@ public class Product implements Serializable {
     }
 
     public static void addWishList(Scanner sc) {
-        showAllProduct();
+        productService.showAllProduct(sc);
         System.out.println("Enter product ID to add to wish list: ");
         int productId = inputNum(sc);
         if(productList.stream().noneMatch(e->e.getProductId()==productId)) {
